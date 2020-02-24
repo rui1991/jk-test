@@ -15,7 +15,14 @@
       <el-container class="module-content">
         <el-aside width="280px" class="module-aside">
           <!-- 组织树 -->
-          <org-module @parentUpdata="orgUpdata"></org-module>
+          <el-tree
+            :data="orgTree"
+            ref="tree"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            :props="defaultProps">
+          </el-tree>
         </el-aside>
         <el-main class="module-main">
           <div class="search">
@@ -38,7 +45,7 @@
               <el-button type="primary" :disabled="downDisabled" @click="downFile">导出</el-button>
             </div>
           </div>
-          <el-table class="list-table" :data="tableData1" border style="width: 100%" :cell-class-name="cellClassName" v-show="orgType !== 3">
+          <el-table class="list-table" :data="tableData1" border style="width: 100%" :cell-class-name="cellClassName" v-show="!itemProject">
             <el-table-column type="index" width="50" label="序号"></el-table-column>
             <el-table-column width="200" :show-overflow-tooltip="true" prop="organize_name" label="组织机构"></el-table-column>
             <el-table-column width="120" prop="date" label="日期"></el-table-column>
@@ -57,7 +64,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-table class="list-table" :data="tableData2" border style="width: 100%" v-show="orgType === 3">
+          <el-table class="list-table" :data="tableData2" border style="width: 100%" v-show="itemProject">
             <el-table-column type="index" width="50" label="序号"></el-table-column>
             <el-table-column prop="organize_name" label="所属区域"></el-table-column>
             <el-table-column width="120" prop="date" label="日期"></el-table-column>
@@ -110,7 +117,7 @@
 <script>
 import { mapState } from 'vuex'
 // 引入组织树组件
-import orgModule from '@/components/public/org-radio'
+// import orgModule from '@/components/public/org-radio'
 // 引入详情组件
 import detModule from '@/components/quality/poscover-det'
 export default{
@@ -128,18 +135,21 @@ export default{
           return time.getTime() > Date.now() - 8.64e7
         }
       },
-      orgId: 0,
-      orgType: 0,
-      proId: 0,
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      itemProject: false,
       tableData1: [],
       tableData2: [],
       total: 0,
       nowPage: 1,
       limit: 10,
       detDialog: false,
+      proId: 0,
       detArea: 0,
       detDate: 1,
-      downDisabled: true,
+      downDisabled: false,
       loading: false
     }
   },
@@ -149,33 +159,18 @@ export default{
     this.nowSearch.date = [nowDate, nowDate]
   },
   components: {
-    orgModule,
+    // orgModule,
     detModule
   },
   computed: {
     ...mapState('user', [
       'userId'
+    ]),
+    ...mapState('other', [
+      'orgTree'
     ])
   },
   methods: {
-    // 组织树
-    orgUpdata (data) {
-      this.orgId = data.id
-      this.orgType = data.type
-      this.proId = data.projectId
-      // 清空搜索框
-      this.search.name = ''
-      this.nowSearch.name = ''
-      // 当前页码初始化
-      this.nowPage = 1
-      if (data.type === 3) {
-        // 获取列表数据
-        this.getListDetData()
-      } else {
-        // 获取列表数据
-        this.getListAllData()
-      }
-    },
     // 搜索
     searchList () {
       let date = this.search.date || []
@@ -193,22 +188,66 @@ export default{
       this.search = JSON.parse(JSON.stringify(this.nowSearch))
       // 当前页码初始化
       this.nowPage = 1
-      // 获取列表数据
-      if (this.orgType === 3) {
-        this.getListDetData()
-      } else {
-        this.getListAllData()
-      }
+      // 查询范围条件判断
+      this.orgDispose()
     },
-    // 获取列表数据
-    getListAllData () {
-      if (!this.orgId) {
+    // 查询范围条件处理
+    orgDispose () {
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择查询范围！',
+          type: 'warning'
+        })
         return
       }
+      // 全部
+      const allNode = nodesData.find(item => {
+        return item.organize_type === 0
+      })
+      // 企业
+      const firmNode = nodesData.find(item => {
+        return item.organize_type === 1
+      })
+      // 项目
+      const projectsNode = nodesData.filter(item => {
+        return item.organize_type === 3
+      })
+      // 获取列表数据
+      if (allNode) {
+        this.itemProject = false
+        this.getListAllData(allNode.id)
+      } else if (firmNode) {
+        this.itemProject = false
+        this.getListAllData(firmNode.id)
+      } else if (projectsNode.length > 1) {
+        this.itemProject = false
+        let ids = []
+        projectsNode.forEach(item => {
+          ids.push(item.base_id)
+        })
+        ids = ids.join(',')
+        this.getProjectsData()
+      } else if (projectsNode.length === 1) {
+        this.itemProject = true
+        this.getListDetData(projectsNode[0].base_id)
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请重新选择查询范围，不能查询部门报表！',
+          type: 'warning'
+        })
+        return
+      }
+    },
+    // 获取分公司列表数据
+    getListAllData (id) {
       let date = this.search.date || []
       let params = {
         user_id: this.userId,
-        ogz_id: this.orgId,
+        ogz_id: id,
         start_date: date[0] || '',
         end_date: date[1] || '',
         page: this.nowPage,
@@ -242,11 +281,51 @@ export default{
         })
       })
     },
-    getListDetData () {
+    // 获取多项目列表数据
+    getProjectsData (ids) {
       let date = this.search.date || []
       let params = {
         user_id: this.userId,
-        project_id: this.proId,
+        project_ids: ids,
+        start_date: date[0] || '',
+        end_date: date[1] || '',
+        page: this.nowPage,
+        limit1: this.limit
+      }
+      params = this.$qs.stringify(params)
+      this.loading = true
+      this.$axios({
+        method: 'post',
+        url: this.sysetApi() + '/v2.0/selPoPatrolCoverRate0224',
+        data: params
+      }).then((res) => {
+        this.loading = false
+        if (res.data.result === 'Sucess') {
+          this.total = res.data.data1.total
+          this.tableData1 = res.data.data1.message
+        } else {
+          const errHint = this.$common.errorCodeHint(res.data.error_code)
+          this.$message({
+            showClose: true,
+            message: errHint,
+            type: 'error'
+          })
+        }
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          showClose: true,
+          message: '服务器连接失败！',
+          type: 'error'
+        })
+      })
+    },
+    // 获取单项目列表数据
+    getListDetData (id) {
+      let date = this.search.date || []
+      let params = {
+        user_id: this.userId,
+        project_id: id,
         start_date: date[0] || '',
         end_date: date[1] || '',
         page: this.nowPage,
@@ -292,22 +371,14 @@ export default{
       this.limit = limit
       // 初始化页码
       this.nowPage = 1
-      // 获取列表数据
-      if (this.orgType === 3) {
-        this.getListDetData()
-      } else {
-        this.getListAllData()
-      }
+      // 查询范围条件判断
+      this.orgDispose()
     },
     // 点击分页
     pageChang (page) {
       this.nowPage = page
-      // 获取列表数据
-      if (this.orgType === 3) {
-        this.getListDetData()
-      } else {
-        this.getListAllData()
-      }
+      // 查询范围条件判断
+      this.orgDispose()
     },
     // 获取跨越天数
     getDateDiff (startDate, endDate) {
@@ -323,6 +394,15 @@ export default{
     },
     /* 详情 */
     detClick (area, date) {
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData) {
+        // 项目
+        const projectsNode = nodesData.find(item => {
+          return item.organize_type === 3
+        })
+        thhis.proId = projectsNode[0].base_id
+      }
       this.detArea = area
       this.detDate = date
       this.detDialog = true
@@ -333,12 +413,79 @@ export default{
     /* 导出 */
     downFile () {
       let date = this.search.date || []
-      if (this.orgType === 3) {
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择导出范围！',
+          type: 'warning'
+        })
+        return
+      }
+      // 全部
+      const allNode = nodesData.find(item => {
+        return item.organize_type === 0
+      })
+      // 企业
+      const firmNode = nodesData.find(item => {
+        return item.organize_type === 1
+      })
+      // 项目
+      const projectsNode = nodesData.filter(item => {
+        return item.organize_type === 3
+      })
+      // 获取列表数据
+      if (allNode) {
         let params = {
           user_id: this.userId,
-          project_id: this.proId,
-          start_date: date[0],
-          end_date: date[1]
+          ogz_id: allNode.id,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
+        }
+        params = this.$qs.stringify(params)
+        this.downDisabled = true
+        setTimeout(() => {
+          this.downDisabled = false
+        }, 5000)
+        window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
+      } else if (firmNode) {
+        let params = {
+          user_id: this.userId,
+          ogz_id: firmNode.id,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
+        }
+        params = this.$qs.stringify(params)
+        this.downDisabled = true
+        setTimeout(() => {
+          this.downDisabled = false
+        }, 5000)
+        window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
+      } else if (projectsNode.length > 1) {
+        let ids = []
+        projectsNode.forEach(item => {
+          ids.push(item.base_id)
+        })
+        ids = ids.join(',')
+        let params = {
+          user_id: this.userId,
+          project_ids: ids,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
+        }
+        params = this.$qs.stringify(params)
+        this.downDisabled = true
+        setTimeout(() => {
+          this.downDisabled = false
+        }, 5000)
+        window.location.href = this.sysetApi() + '/selPoPatrolCoverRate0224EO?' + params
+      } else if (projectsNode.length === 1) {
+        let params = {
+          user_id: this.userId,
+          project_id: projectsNode[0].base_id,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
         }
         params = this.$qs.stringify(params)
         this.downDisabled = true
@@ -347,25 +494,12 @@ export default{
         }, 5000)
         window.location.href = this.sysetApi() + '/v2.0/selProPoPatrolCoverRateEO?' + params
       } else {
-        let params = {
-          user_id: this.userId,
-          ogz_id: this.orgId,
-          start_date: date[0],
-          end_date: date[1]
-        }
-        params = this.$qs.stringify(params)
-        this.downDisabled = true
-        setTimeout(() => {
-          this.downDisabled = false
-        }, 5000)
-        window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
-      }
-    }
-  },
-  watch: {
-    orgId (val, oldVal) {
-      if (val) {
-        this.downDisabled = false
+        this.$message({
+          showClose: true,
+          message: '请重新选择导出范围，不能导出部门报表！',
+          type: 'warning'
+        })
+        return
       }
     }
   }

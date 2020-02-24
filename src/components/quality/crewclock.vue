@@ -15,7 +15,14 @@
       <el-container class="module-content">
         <el-aside width="280px" class="module-aside">
           <!-- 组织树 -->
-          <org-module @parentUpdata="orgUpdata"></org-module>
+          <el-tree
+            :data="orgTree"
+            ref="tree"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            :props="defaultProps">
+          </el-tree>
         </el-aside>
         <el-main class="module-main">
           <div class="search">
@@ -34,7 +41,7 @@
                   end-placeholder="结束日期">
                 </el-date-picker>
               </div>
-              <div class="item" v-show="orgType === 3">
+              <div class="item" v-show="itemProject">
                 <span>胸牌编号</span>
                 <el-input style="width: 160px;" v-model="nowSearch.mac"></el-input>
               </div>
@@ -44,14 +51,14 @@
               </div>
             </div>
             <div class="search-input">
-              <div class="item" v-show="orgType === 3">
+              <div class="item" v-show="itemProject">
                 <span>员工姓名</span>
                 <el-input style="width: 160px;" v-model="nowSearch.name"></el-input>
               </div>
               <div class="operate"></div>
             </div>
           </div>
-          <el-table class="list-table" :data="tableData1" border :summary-method="getSummaries1" show-summary style="width: 100%" v-show="orgType !== 3">
+          <el-table class="list-table" :data="tableData1" border :summary-method="getSummaries1" show-summary style="width: 100%" v-show="!itemProject">
             <el-table-column type="index" width="50" label="序号"></el-table-column>
             <el-table-column width="200" :show-overflow-tooltip="true" prop="organize_name" label="组织机构"></el-table-column>
             <el-table-column prop="all_po_size" label="地址总数"></el-table-column>
@@ -85,7 +92,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-table class="list-table" :data="tableData2" border :summary-method="getSummaries2" show-summary style="width: 100%" v-show="orgType === 3">
+          <el-table class="list-table" :data="tableData2" border :summary-method="getSummaries2" show-summary style="width: 100%" v-show="itemProject">
             <el-table-column type="index" width="50" label="序号"></el-table-column>
             <el-table-column width="180" :show-overflow-tooltip="true" label="胸牌编号">
               <template slot-scope="scope">
@@ -104,7 +111,7 @@
             </el-table-column>
             <el-table-column label="未打卡点位数">
               <template slot-scope="scope">
-                <a href="javascript:;" class="red" v-if="scope.row.notRecordSize > 0" @click="detClick(scope.row.user_id, scope.row.positions)">{{ scope.row.notRecordSize  }}</a>
+                <a href="javascript:;" class="red" v-if="scope.row.notRecordSize > 0" @click="detClick(scope.row.project_id, scope.row.user_id, scope.row.positions)">{{ scope.row.notRecordSize  }}</a>
                 <span v-else>0</span>
               </template>
             </el-table-column>
@@ -156,7 +163,7 @@
 <script>
 import { mapState } from 'vuex'
 // 引入组织树组件
-import orgModule from '@/components/public/org-radio'
+// import orgModule from '@/components/public/org-checkbox'
 // 引入详情组件
 import detModule from '@/components/quality/crewclock-det'
 export default{
@@ -178,9 +185,11 @@ export default{
           return time.getTime() > Date.now() - 8.64e7
         }
       },
-      orgId: 0,
-      orgType: 0,
-      proId: 0,
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      itemProject: false,
       tableData1: [],
       tableData2: [],
       total: 0,
@@ -189,7 +198,8 @@ export default{
       detDialog: false,
       detUid: 0,
       detState: 1,
-      downDisabled: true,
+      proId: 0,
+      downDisabled: false,
       loading: false
     }
   },
@@ -199,41 +209,17 @@ export default{
     this.nowSearch.date = [nowDate, nowDate]
   },
   components: {
-    orgModule,
     detModule
   },
   computed: {
     ...mapState('user', [
       'userId'
+    ]),
+    ...mapState('other', [
+      'orgTree'
     ])
   },
-  filters: {
-    countRate (want, already) {
-      if (!want) return '0%'
-      if (!already) return '0%'
-      let rate = already / want
-      return Math.round(rate * 100) + '%'
-    }
-  },
   methods: {
-    // 组织树
-    orgUpdata (data) {
-      this.orgId = data.id
-      this.orgType = data.type
-      this.proId = data.projectId
-      // 清空搜索框
-      this.search.name = ''
-      this.nowSearch.name = ''
-      // 当前页码初始化
-      this.nowPage = 1
-      if (data.type === 3) {
-        // 获取列表数据
-        this.getListDetData()
-      } else {
-        // 获取列表数据
-        this.getListAllData()
-      }
-    },
     // 搜索
     searchList () {
       let date = this.search.date || []
@@ -251,22 +237,66 @@ export default{
       this.search = JSON.parse(JSON.stringify(this.nowSearch))
       // 当前页码初始化
       this.nowPage = 1
-      // 获取列表数据
-      if (this.orgType === 3) {
-        this.getListDetData()
-      } else {
-        this.getListAllData()
-      }
+      // 查询范围条件判断
+      this.orgDispose()
     },
-    // 获取列表数据
-    getListAllData () {
-      if (!this.orgId) {
+    // 查询范围条件处理
+    orgDispose () {
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择查询范围！',
+          type: 'warning'
+        })
         return
       }
+      // 全部
+      const allNode = nodesData.find(item => {
+        return item.organize_type === 0
+      })
+      // 企业
+      const firmNode = nodesData.find(item => {
+        return item.organize_type === 1
+      })
+      // 项目
+      const projectsNode = nodesData.filter(item => {
+        return item.organize_type === 3
+      })
+      // 获取列表数据
+      if (allNode) {
+        this.itemProject = false
+        this.getListAllData(allNode.id)
+      } else if (firmNode) {
+        this.itemProject = false
+        this.getListAllData(firmNode.id)
+      } else if (projectsNode.length > 1) {
+        this.itemProject = false
+        let ids = []
+        projectsNode.forEach(item => {
+          ids.push(item.base_id)
+        })
+        ids = ids.join(',')
+        this.getProjectsData()
+      } else if (projectsNode.length === 1) {
+        this.itemProject = true
+        this.getListDetData(projectsNode[0].base_id)
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请重新选择查询范围，不能查询部门报表！',
+          type: 'warning'
+        })
+        return
+      }
+    },
+    // 获取分公司列表数据
+    getListAllData (id) {
       let date = this.search.date || []
       let params = {
         user_id: this.userId,
-        ogz_id: this.orgId,
+        ogz_id: id,
         start_date: date[0] || '',
         end_date: date[1] || '',
         page: this.nowPage,
@@ -300,13 +330,53 @@ export default{
         })
       })
     },
-    getListDetData () {
+    // 获取多项目列表数据
+    getProjectsData (ids) {
+      let date = this.search.date || []
+      let params = {
+        user_id: this.userId,
+        project_ids: ids,
+        start_date: date[0] || '',
+        end_date: date[1] || '',
+        page: this.nowPage,
+        limit1: this.limit
+      }
+      params = this.$qs.stringify(params)
+      this.loading = true
+      this.$axios({
+        method: 'post',
+        url: this.sysetApi() + '/v2.0/selRollCallReport0224',
+        data: params
+      }).then((res) => {
+        this.loading = false
+        if (res.data.result === 'Sucess') {
+          this.total = res.data.data1.total
+          this.tableData1 = res.data.data1.message
+        } else {
+          const errHint = this.$common.errorCodeHint(res.data.error_code)
+          this.$message({
+            showClose: true,
+            message: errHint,
+            type: 'error'
+          })
+        }
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          showClose: true,
+          message: '服务器连接失败！',
+          type: 'error'
+        })
+      })
+    },
+    // 获取单项目列表数据
+    getListDetData (id) {
       let date = this.search.date || []
       let mac = this.search.mac
       mac = mac.replace(/:/g, '')
       let params = {
         user_id: this.userId,
-        project_id: this.proId,
+        project_id: id,
         user_name: this.search.name,
         card_mac: mac,
         start_date: date[0] || '',
@@ -589,22 +659,14 @@ export default{
       this.limit = limit
       // 初始化页码
       this.nowPage = 1
-      // 获取列表数据
-      if (this.orgType === 3) {
-        this.getListDetData()
-      } else {
-        this.getListAllData()
-      }
+      // 查询范围条件判断
+      this.orgDispose()
     },
     // 点击分页
     pageChang (page) {
       this.nowPage = page
-      // 获取列表数据
-      if (this.orgType === 3) {
-        this.getListDetData()
-      } else {
-        this.getListAllData()
-      }
+      // 查询范围条件判断
+      this.orgDispose()
     },
     // 获取跨越天数
     getDateDiff (startDate, endDate) {
@@ -619,7 +681,8 @@ export default{
       }
     },
     /* 详情 */
-    detClick (uid, positions) {
+    detClick (pid, uid, positions) {
+      this.proId = pid
       this.detUid = uid
       let detState = 1
       if (positions === '全部') {
@@ -634,12 +697,79 @@ export default{
     /* 导出 */
     downFile () {
       let date = this.search.date || []
-      if (this.orgType === 3) {
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择导出范围！',
+          type: 'warning'
+        })
+        return
+      }
+      // 全部
+      const allNode = nodesData.find(item => {
+        return item.organize_type === 0
+      })
+      // 企业
+      const firmNode = nodesData.find(item => {
+        return item.organize_type === 1
+      })
+      // 项目
+      const projectsNode = nodesData.find(item => {
+        return item.organize_type === 3
+      })
+      // 获取列表数据
+      if (allNode) {
+        let params = {
+          user_id: this.userId,
+          ogz_id: allNode[0].id,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
+        }
+        params = this.$qs.stringify(params)
+        this.downDisabled = true
+        setTimeout(() => {
+          this.downDisabled = false
+        }, 5000)
+        window.location.href = this.sysetApi() + '/v2.0/selRollCallReport823EO?' + params
+      } else if (firmNode) {
+        let params = {
+          user_id: this.userId,
+          ogz_id: firmNode[0].id,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
+        }
+        params = this.$qs.stringify(params)
+        this.downDisabled = true
+        setTimeout(() => {
+          this.downDisabled = false
+        }, 5000)
+        window.location.href = this.sysetApi() + '/v2.0/selRollCallReport823EO?' + params
+      } else if (projectsNode.length > 1) {
+        let ids = []
+        projectsNode.forEach(item => {
+          ids.push(item.base_id)
+        })
+        ids = ids.join(',')
+        let params = {
+          user_id: this.userId,
+          project_ids: ids,
+          start_date: date[0] || '',
+          end_date: date[1] || ''
+        }
+        params = this.$qs.stringify(params)
+        this.downDisabled = true
+        setTimeout(() => {
+          this.downDisabled = false
+        }, 5000)
+        window.location.href = this.sysetApi() + '/v2.0/selRollCallReport0224EO?' + params
+      } else if (projectsNode.length === 1) {
         let mac = this.search.mac
         mac = mac.replace(/:/g, '')
         let params = {
           user_id: this.userId,
-          project_id: this.proId,
+          project_id: projectsNode[0].base_id,
           user_name: this.search.name,
           card_mac: mac,
           start_date: date[0] || '',
@@ -652,26 +782,21 @@ export default{
         }, 5000)
         window.location.href = this.sysetApi() + '/v2.0/selRollCallReportEO?' + params
       } else {
-        let params = {
-          user_id: this.userId,
-          ogz_id: this.orgId,
-          start_date: date[0] || '',
-          end_date: date[1] || ''
-        }
-        params = this.$qs.stringify(params)
-        this.downDisabled = true
-        setTimeout(() => {
-          this.downDisabled = false
-        }, 5000)
-        window.location.href = this.sysetApi() + '/v2.0/selRollCallReport823EO?' + params
+        this.$message({
+          showClose: true,
+          message: '请重新选择导出范围，不能导出部门报表！',
+          type: 'warning'
+        })
+        return
       }
     }
   },
-  watch: {
-    orgId (val, oldVal) {
-      if (val) {
-        this.downDisabled = false
-      }
+  filters: {
+    countRate (want, already) {
+      if (!want) return '0%'
+      if (!already) return '0%'
+      let rate = already / want
+      return Math.round(rate * 100) + '%'
     }
   }
 }
