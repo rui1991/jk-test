@@ -15,7 +15,14 @@
       <el-container class="module-content">
         <el-aside width="280px" class="module-aside">
           <!-- 组织树 -->
-          <org-module></org-module>
+          <el-tree
+            :data="orgTree"
+            ref="tree"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            :props="defaultProps">
+          </el-tree>
         </el-aside>
         <el-main class="module-main">
           <div class="search">
@@ -102,7 +109,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 // 引入组织树组件
-import orgModule from '@/components/report/report-org'
+// import orgModule from '@/components/report/report-org'
 export default{
   name: 'reportStaff',
   data () {
@@ -122,12 +129,16 @@ export default{
           return time.getTime() > Date.now()
         }
       },
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
       tableData: [],
       groupContent: '',
       total: 0,
       nowPage: 1,
       limit: 10,
-      downDisabled: true,
+      downDisabled: false,
       loading: false
     }
   },
@@ -145,19 +156,17 @@ export default{
       this.search.date = this.date
       this.nowSearch.date = this.date
     }
-    if (this.organizeId) {
-      this.downDisabled = false
-      // 获取列表数据
-      this.getListData()
-    }
   },
   components: {
-    orgModule
+    // orgModule
   },
   computed: {
     ...mapState('user', [
       'companyId',
       'userId'
+    ]),
+    ...mapState('other', [
+      'orgTree'
     ]),
     ...mapState('report', [
       'organizeId',
@@ -168,37 +177,73 @@ export default{
     ...mapActions('report', [
       'setReportDate'
     ]),
-    // 更新列表
-    updateList () {
-      // 清空搜索框
-      this.search.name = ''
-      this.search.task = ''
-      this.nowSearch.name = ''
-      this.nowSearch.task = ''
-      // 当前页码初始化
-      this.nowPage = 1
-      // 获取列表数据
-      this.getListData()
-    },
     // 搜索
     searchList () {
       this.search = JSON.parse(JSON.stringify(this.nowSearch))
-      // 判断是否选择组织
-      if (!this.organizeId) return
       // 当前页码初始化
       this.nowPage = 1
+      // 查询范围条件判断
+      this.orgDispose()
+      // // 设置报表时间
+      // const date = this.search.date
+      // this.setReportDate(date)
+    },
+    // 查询范围条件处理
+    orgDispose () {
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择查询范围！',
+          type: 'warning'
+        })
+        return
+      }
+      // 全部
+      const allNode = nodesData.find(item => {
+        return item.organize_type === 0
+      })
+      // 企业
+      const firmNode = nodesData.find(item => {
+        return item.organize_type === 1
+      })
+      // 项目
+      const projectsNode = nodesData.filter(item => {
+        return item.organize_type === 3
+      })
       // 获取列表数据
-      this.getListData()
-      // 设置报表时间
-      const date = this.search.date
-      this.setReportDate(date)
+      if (allNode) {
+        this.itemProject = false
+        this.getListData(allNode.id)
+      } else if (firmNode) {
+        this.itemProject = false
+        this.getListData(firmNode.id)
+      } else if (projectsNode.length > 1) {
+        this.itemProject = false
+        let ids = []
+        projectsNode.forEach(item => {
+          ids.push(item.base_id)
+        })
+        ids = ids.join(',')
+        this.getProjectsData(ids)
+      } else if (projectsNode.length === 1) {
+        this.itemProject = true
+        this.getListData(projectsNode[0].id)
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请重新选择查询范围，不能查询部门报表！',
+          type: 'warning'
+        })
+        return
+      }
     },
     // 获取列表数据
-    getListData () {
-      if (!this.organizeId) return
+    getListData (id) {
       const date = this.search.date
       let params = {
-        organize_id: this.organizeId,
+        organize_id: id,
         project_name: '',
         user_name: this.search.name,
         plan_name: this.search.task,
@@ -218,6 +263,49 @@ export default{
         if (res.data.result === 'Sucess') {
           this.total = res.data.data1.total
           this.tableData = res.data.data1.userTask
+        } else {
+          const errHint = this.$common.errorCodeHint(res.data.error_code)
+          this.$message({
+            showClose: true,
+            message: errHint,
+            type: 'error'
+          })
+        }
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          showClose: true,
+          message: '服务器连接失败！',
+          type: 'error'
+        })
+      })
+    },
+    // 获取多项目列表数据
+    getProjectsData (ids) {
+      let date = this.search.date
+      let params = {
+        project_ids: ids,
+        seltype: 2,
+        start_date: date[0],
+        end_date: date[1],
+        page: this.nowPage,
+        limit1: this.limit
+      }
+      params = this.$qs.stringify(params)
+      this.loading = true
+      this.$axios({
+        method: 'post',
+        url: this.reportApi() + '/report/v3.4/selUserInspectTask',
+        data: params
+      }).then((res) => {
+        this.loading = false
+        if (res.data.result === 'Sucess') {
+          // this.total = res.data.data1.total
+          const tableAllData = res.data.data1.message
+          this.total = tableAllData.length
+          this.tableAllData = tableAllData
+          const tableData = tableAllData.slice(0, this.limit)
+          this.tableData = tableData
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)
           this.$message({
@@ -378,9 +466,55 @@ export default{
     },
     /* 导出文件 */
     downFile () {
-      const date = this.search.date
+      // 获取节点
+      const nodesData = this.$refs.tree.getCheckedNodes()
+      if (nodesData.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择导出范围！',
+          type: 'warning'
+        })
+        return
+      }
+      // 全部
+      const allNode = nodesData.find(item => {
+        return item.organize_type === 0
+      })
+      // 企业
+      const firmNode = nodesData.find(item => {
+        return item.organize_type === 1
+      })
+      // 项目
+      const projectsNode = nodesData.filter(item => {
+        return item.organize_type === 3
+      })
+      // 获取列表数据
+      if (allNode) {
+        this.downOtherFile(allNode.id)
+      } else if (firmNode) {
+        this.downOtherFile(firmNode.id)
+      } else if (projectsNode.length > 1) {
+        let ids = []
+        projectsNode.forEach(item => {
+          ids.push(item.base_id)
+        })
+        ids = ids.join(',')
+        this.downProjectsFile(ids)
+      } else if (projectsNode.length === 1) {
+        this.downOtherFile(projectsNode[0].id)
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请重新选择导出范围，不能导出部门报表！',
+          type: 'warning'
+        })
+        return
+      }
+    },
+    downOtherFile (id) {
+      let date = this.search.date || []
       let params = {
-        organize_id: this.organizeId,
+        organize_id: id,
         project_name: '',
         user_name: this.search.name,
         plan_name: this.search.task,
@@ -393,18 +527,27 @@ export default{
         this.downDisabled = false
       }, 5000)
       window.location.href = this.reportApi() + '/v3.4/selUserInspectTaskEO?' + params
+    },
+    downProjectsFile (ids) {
+      let date = this.search.date || []
+      let params = {
+        organize_id: ids,
+        seltype: 2,
+        user_name: this.search.name,
+        plan_name: this.search.task,
+        start_date: date[0],
+        end_date: date[1]
+      }
+      params = this.$qs.stringify(params)
+      this.downDisabled = true
+      setTimeout(() => {
+        this.downDisabled = false
+      }, 5000)
+      window.location.href = this.reportApi() + '/report/v3.4/selUserInspectTaskEO?' + params
     }
   },
   watch: {
-    organizeId (val, oldVal) {
-      if (val) {
-        // 更新列表
-        this.updateList()
-        this.downDisabled = false
-      } else {
-        this.downDisabled = true
-      }
-    }
+
   }
 }
 </script>

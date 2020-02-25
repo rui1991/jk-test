@@ -229,7 +229,7 @@ export default{
           ids.push(item.base_id)
         })
         ids = ids.join(',')
-        this.getProjectsData()
+        this.getProjectsData(ids)
       } else if (projectsNode.length === 1) {
         this.itemProject = true
         this.getListDetData(projectsNode[0].base_id)
@@ -412,7 +412,6 @@ export default{
     },
     /* 导出 */
     downFile () {
-      let date = this.search.date || []
       // 获取节点
       const nodesData = this.$refs.tree.getCheckedNodes()
       if (nodesData.length === 0) {
@@ -437,62 +436,18 @@ export default{
       })
       // 获取列表数据
       if (allNode) {
-        let params = {
-          user_id: this.userId,
-          ogz_id: allNode.id,
-          start_date: date[0] || '',
-          end_date: date[1] || ''
-        }
-        params = this.$qs.stringify(params)
-        this.downDisabled = true
-        setTimeout(() => {
-          this.downDisabled = false
-        }, 5000)
-        window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
+        this.downAllFile(allNode.id)
       } else if (firmNode) {
-        let params = {
-          user_id: this.userId,
-          ogz_id: firmNode.id,
-          start_date: date[0] || '',
-          end_date: date[1] || ''
-        }
-        params = this.$qs.stringify(params)
-        this.downDisabled = true
-        setTimeout(() => {
-          this.downDisabled = false
-        }, 5000)
-        window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
+        this.downAllFile(firmNode.id)
       } else if (projectsNode.length > 1) {
         let ids = []
         projectsNode.forEach(item => {
           ids.push(item.base_id)
         })
         ids = ids.join(',')
-        let params = {
-          user_id: this.userId,
-          project_ids: ids,
-          start_date: date[0] || '',
-          end_date: date[1] || ''
-        }
-        params = this.$qs.stringify(params)
-        this.downDisabled = true
-        setTimeout(() => {
-          this.downDisabled = false
-        }, 5000)
-        window.location.href = this.sysetApi() + '/selPoPatrolCoverRate0224EO?' + params
+        this.downProjectsFile(ids)
       } else if (projectsNode.length === 1) {
-        let params = {
-          user_id: this.userId,
-          project_id: projectsNode[0].base_id,
-          start_date: date[0] || '',
-          end_date: date[1] || ''
-        }
-        params = this.$qs.stringify(params)
-        this.downDisabled = true
-        setTimeout(() => {
-          this.downDisabled = false
-        }, 5000)
-        window.location.href = this.sysetApi() + '/v2.0/selProPoPatrolCoverRateEO?' + params
+        this.downDetFile(projectsNode[0].base_id)
       } else {
         this.$message({
           showClose: true,
@@ -501,6 +456,51 @@ export default{
         })
         return
       }
+    },
+    downAllFile (id) {
+      let date = this.search.date || []
+      let params = {
+        user_id: this.userId,
+        ogz_id: id,
+        start_date: date[0] || '',
+        end_date: date[1] || ''
+      }
+      params = this.$qs.stringify(params)
+      this.downDisabled = true
+      setTimeout(() => {
+        this.downDisabled = false
+      }, 5000)
+      window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
+    },
+    downProjectsFile (ids) {
+      let date = this.search.date || []
+      let params = {
+        user_id: this.userId,
+        project_ids: ids,
+        start_date: date[0] || '',
+        end_date: date[1] || ''
+      }
+      params = this.$qs.stringify(params)
+      this.downDisabled = true
+      setTimeout(() => {
+        this.downDisabled = false
+      }, 5000)
+      window.location.href = this.sysetApi() + '/selPoPatrolCoverRate0224EO?' + params
+    },
+    downDetFile (id) {
+      let date = this.search.date || []
+      let params = {
+        user_id: this.userId,
+        project_id: id,
+        start_date: date[0] || '',
+        end_date: date[1] || ''
+      }
+      params = this.$qs.stringify(params)
+      this.downDisabled = true
+      setTimeout(() => {
+        this.downDisabled = false
+      }, 5000)
+      window.location.href = this.sysetApi() + '/v2.0/selProPoPatrolCoverRateEO?' + params
     }
   }
 }
