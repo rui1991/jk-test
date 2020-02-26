@@ -11,8 +11,8 @@ module.exports = {
     proxyTable: {
       '/api': {
         // target: 'http://www.allsps.com',
-        // target: 'http://szydak.eicp.net:82',
-        target: 'http://192.168.1.177:8080',
+        target: 'http://szydak.eicp.net:82',
+        // target: 'http://192.168.1.177:8080',
         changeOrigin: true,
         pathRewrite: {  // 需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
           '^/apiUrl': ''

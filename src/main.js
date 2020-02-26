@@ -65,16 +65,16 @@ Vue.prototype.$common = common
 // 配置公共变量
 Vue.prototype.baseUrl = () => 'http://szydak.eicp.net:82'
 Vue.prototype.sysetApi = () => 'http://szydak.eicp.net:82/ezx_jk'
-Vue.prototype.reportApi = () => 'http://szydak.eicp.net:8089'
+Vue.prototype.reportApi = () => 'http://szydak.eicp.net:82/ezx_jk/report'
 Vue.prototype.loraApi = () => 'http://szydak.eicp.net:8099'
+
+// Vue.prototype.reportApi = () => '/apiUrl/ezx_jk/report'
 
 // Vue.prototype.baseUrl = () => 'http://192.168.1.177:8080'
 // Vue.prototype.sysetApi = () => 'http://192.168.1.177:8080/ezx_jk'
 // // Vue.prototype.sysetApi = () => 'http://szydak.eicp.net:82/ezx_syset'
 // Vue.prototype.reportApi = () => 'http://192.168.1.177:8089'
 // Vue.prototype.loraApi = () => 'http://192.168.1.177:8099'
-
-// Vue.prototype.loraApi = () => '/apiUrl'
 
 // Vue.prototype.baseUrl = () => 'http://www.allsps.com'
 // Vue.prototype.sysetApi = () => 'http://www.allsps.com/ezx_syset'

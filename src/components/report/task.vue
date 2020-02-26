@@ -125,6 +125,7 @@ export default{
         children: 'children',
         label: 'name'
       },
+      itemProject: false,
       nameSearch: false,
       tableAllData: [],
       tableData: [],
@@ -313,7 +314,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/report/v3.4/selUserInspectTask',
+        url: this.reportApi() + '/v3.4/selInspectTask',
         data: params
       }).then((res) => {
         this.loading = false
@@ -476,8 +477,8 @@ export default{
       // 初始化页码
       this.nowPage = 1
       if (this.organizeType === 3) {
-        // 获取列表详情数据
-        this.getListDetData()
+        // 查询范围条件判断
+        this.orgDispose()
       } else {
         // 获取列表
         const start = this.nowPage * limit - limit
@@ -490,8 +491,8 @@ export default{
     pageChang (page) {
       this.nowPage = page
       if (this.itemProject) {
-        // 获取列表详情数据
-        this.getListDetData()
+        // 查询范围条件判断
+        this.orgDispose()
       } else {
         // 获取列表
         const start = page * this.limit - this.limit
@@ -577,7 +578,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/report/v3.4/selUserInspectTaskEO?' + params
+      window.location.href = this.reportApi() + '/v3.4/selInspectTaskEO?' + params
     },
     downDetFile (id) {
       let date = this.search.date || []

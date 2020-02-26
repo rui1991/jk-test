@@ -133,6 +133,7 @@ export default{
         children: 'children',
         label: 'name'
       },
+      itemProject: false,
       tableData: [],
       groupContent: '',
       total: 0,
@@ -295,17 +296,13 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/report/v3.4/selUserInspectTask',
+        url: this.reportApi() + '/v3.4/selUserInspectTask',
         data: params
       }).then((res) => {
         this.loading = false
         if (res.data.result === 'Sucess') {
-          // this.total = res.data.data1.total
-          const tableAllData = res.data.data1.message
-          this.total = tableAllData.length
-          this.tableAllData = tableAllData
-          const tableData = tableAllData.slice(0, this.limit)
-          this.tableData = tableData
+          this.total = res.data.data1.total
+          this.tableData = res.data.data1.userTask
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)
           this.$message({
@@ -418,14 +415,14 @@ export default{
       this.limit = limit
       // 初始化页码
       this.nowPage = 1
-      // 获取列表数据
-      this.getListData()
+      // 查询范围条件判断
+      this.orgDispose()
     },
     // 点击分页
     pageChang (page) {
       this.nowPage = page
-      // 获取列表数据
-      this.getListData()
+      // 查询范围条件判断
+      this.orgDispose()
     },
     /* 获取组人员 */
     getGrouoCrew (id) {
@@ -543,7 +540,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/report/v3.4/selUserInspectTaskEO?' + params
+      window.location.href = this.reportApi() + '/v3.4/selUserInspectTaskEO?' + params
     }
   },
   watch: {
