@@ -388,7 +388,10 @@ export default{
           }
           this.setDetAuthority(autDet)
           // 保存机构树
-          const orgTree = loginData.trees
+          let orgTree = loginData.trees
+          if (orgTree[0].organize_type === 0) {
+            orgTree = orgTree[0].children
+          }
           this.setOrganTree(orgTree)
           // 处理部门
           let orgData = this.initDisSecTree(JSON.parse(JSON.stringify(orgTree)))

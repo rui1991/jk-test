@@ -137,6 +137,9 @@ export default{
       }).then((res) => {
         if (res.data.result === 'Sucess') {
           let orgData = res.data.data1
+          if (orgData[0].organize_type === 0) {
+            orgData = orgData[0].children
+          }
           this.orgData = orgData
           if (b) {
             this.$refs.tree.setCheckedKeys([this.orgId])

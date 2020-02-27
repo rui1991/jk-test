@@ -247,7 +247,10 @@ export default{
       }).then((res) => {
         if (res.data.result === 'Sucess') {
           // 组织树
-          const orgTree = res.data.data1
+          let orgTree = res.data.data1
+          if (orgTree[0].organize_type === 0) {
+            orgTree = orgTree[0].children
+          }
           this.orgTree = orgTree
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)

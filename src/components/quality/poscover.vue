@@ -401,7 +401,7 @@ export default{
         const projectsNode = nodesData.find(item => {
           return item.organize_type === 3
         })
-        thhis.proId = projectsNode[0].base_id
+        this.proId = projectsNode.base_id
       }
       this.detArea = area
       this.detDate = date
@@ -485,7 +485,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/selPoPatrolCoverRate0224EO?' + params
+      window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRate0224EO?' + params
     },
     downDetFile (id) {
       let date = this.search.date || []

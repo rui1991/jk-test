@@ -64,7 +64,10 @@ export default{
       }).then((res) => {
         if (res.data.result === 'Sucess') {
           // 组织树
-          const treeData = res.data.data1
+          let treeData = res.data.data1
+          if (treeData[0].organize_type === 0) {
+            treeData = treeData[0].children
+          }
           this.treeData = treeData
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)

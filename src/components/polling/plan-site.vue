@@ -28,12 +28,12 @@
         <el-table class="select-table" :data="tableData" @selection-change="handleSelectionChange" max-height="420" stripe style="width: 100%">
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="position_name" label="地址名称"></el-table-column>
-          <el-table-column label="关联标准">
-            <template slot-scope="scope">
-              <span v-if="scope.row.template_id">{{ scope.row.template_name }}</span>
-              <span v-else>无</span>
-            </template>
-          </el-table-column>
+<!--          <el-table-column label="关联标准">-->
+<!--            <template slot-scope="scope">-->
+<!--              <span v-if="scope.row.template_id">{{ scope.row.template_name }}</span>-->
+<!--              <span v-else>无</span>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
         <p class="hint">提示：先勾选地址，后通过左侧操作按钮移除地址！</p>
       </div>

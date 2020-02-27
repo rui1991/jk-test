@@ -27,9 +27,9 @@ export default{
 
   },
   mounted () {
-    if (this.organizeId) {
-      this.$refs.tree.setCheckedKeys([this.organizeId])
-    }
+    // if (this.organizeId) {
+    //   this.$refs.tree.setCheckedKeys([this.organizeId])
+    // }
   },
   computed: {
     ...mapState('other', [

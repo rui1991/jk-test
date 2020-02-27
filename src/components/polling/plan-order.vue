@@ -100,7 +100,7 @@ export default{
     },
     // 上一步
     backClick () {
-      this.$emit('parentActiveFun', 2)
+      this.$emit('parentActiveFun', 1)
     },
     // 保存
     saveClick () {

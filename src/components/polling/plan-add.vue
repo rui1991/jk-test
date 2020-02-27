@@ -13,7 +13,7 @@
           <el-steps :active="titleActive" align-center>
             <el-step title="填写基础信息"></el-step>
             <el-step title="选择地址"></el-step>
-            <el-step title="调整标准"></el-step>
+<!--            <el-step title="调整标准"></el-step>-->
             <el-step title="顺序调整"></el-step>
           </el-steps>
         </div>
@@ -29,11 +29,11 @@
             @parentActiveFun="activeFun"
             @parentCancelFun="cancelSkip"
             v-else-if="titleActive === 1"></plan-site>
-          <plan-norm
-            :parentSite="siteForm"
-            @parentActiveFun="activeFun"
-            @parentCancelFun="cancelSkip"
-            v-else-if="titleActive === 2"></plan-norm>
+<!--          <plan-norm-->
+<!--            :parentSite="siteForm"-->
+<!--            @parentActiveFun="activeFun"-->
+<!--            @parentCancelFun="cancelSkip"-->
+<!--            v-else-if="titleActive === 2"></plan-norm>-->
           <plan-order
             :parentSite="siteForm"
             :parentBtnState="btnState"
@@ -119,7 +119,7 @@ export default{
     // 选择地址
     siteFun (data) {
       this.siteForm.positions = data
-      this.titleActive = 2
+      this.titleActive = 3
     },
     // 第几步
     activeFun (num) {

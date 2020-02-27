@@ -201,26 +201,11 @@ export default{
         })
         return
       }
-      // 全部
-      const allNode = nodesData.find(item => {
-        return item.organize_type === 0
-      })
-      // 企业
-      const firmNode = nodesData.find(item => {
-        return item.organize_type === 1
-      })
       // 项目
       const projectsNode = nodesData.filter(item => {
         return item.organize_type === 3
       })
-      // 获取列表数据
-      if (allNode) {
-        this.itemProject = false
-        this.getListData(allNode.id)
-      } else if (firmNode) {
-        this.itemProject = false
-        this.getListData(firmNode.id)
-      } else if (projectsNode.length > 1) {
+     if (projectsNode.length > 0) {
         this.itemProject = false
         let ids = []
         projectsNode.forEach(item => {
@@ -228,9 +213,6 @@ export default{
         })
         ids = ids.join(',')
         this.getProjectsData(ids)
-      } else if (projectsNode.length === 1) {
-        this.itemProject = true
-        this.getListData(projectsNode[0].id)
       } else {
         this.$message({
           showClose: true,
@@ -240,53 +222,14 @@ export default{
         return
       }
     },
-    // 获取列表数据
-    getListData (id) {
-      const date = this.search.date
-      let params = {
-        organize_id: id,
-        project_name: '',
-        user_name: this.search.name,
-        plan_name: this.search.task,
-        start_date: date[0],
-        end_date: date[1],
-        page: this.nowPage,
-        limit1: this.limit
-      }
-      params = this.$qs.stringify(params)
-      this.loading = true
-      this.$axios({
-        method: 'post',
-        url: this.reportApi() + '/v3.4/selUserInspectTask',
-        data: params
-      }).then((res) => {
-        this.loading = false
-        if (res.data.result === 'Sucess') {
-          this.total = res.data.data1.total
-          this.tableData = res.data.data1.userTask
-        } else {
-          const errHint = this.$common.errorCodeHint(res.data.error_code)
-          this.$message({
-            showClose: true,
-            message: errHint,
-            type: 'error'
-          })
-        }
-      }).catch(() => {
-        this.loading = false
-        this.$message({
-          showClose: true,
-          message: '服务器连接失败！',
-          type: 'error'
-        })
-      })
-    },
     // 获取多项目列表数据
     getProjectsData (ids) {
       let date = this.search.date
       let params = {
         project_ids: ids,
         seltype: 2,
+        user_name: this.search.name,
+        plan_name: this.search.task,
         start_date: date[0],
         end_date: date[1],
         page: this.nowPage,
@@ -473,32 +416,18 @@ export default{
         })
         return
       }
-      // 全部
-      const allNode = nodesData.find(item => {
-        return item.organize_type === 0
-      })
-      // 企业
-      const firmNode = nodesData.find(item => {
-        return item.organize_type === 1
-      })
       // 项目
       const projectsNode = nodesData.filter(item => {
         return item.organize_type === 3
       })
       // 获取列表数据
-      if (allNode) {
-        this.downOtherFile(allNode.id)
-      } else if (firmNode) {
-        this.downOtherFile(firmNode.id)
-      } else if (projectsNode.length > 1) {
+     if (projectsNode.length > 0) {
         let ids = []
         projectsNode.forEach(item => {
           ids.push(item.base_id)
         })
         ids = ids.join(',')
         this.downProjectsFile(ids)
-      } else if (projectsNode.length === 1) {
-        this.downOtherFile(projectsNode[0].id)
       } else {
         this.$message({
           showClose: true,
@@ -508,27 +437,10 @@ export default{
         return
       }
     },
-    downOtherFile (id) {
-      let date = this.search.date || []
-      let params = {
-        organize_id: id,
-        project_name: '',
-        user_name: this.search.name,
-        plan_name: this.search.task,
-        start_date: date[0],
-        end_date: date[1]
-      }
-      params = this.$qs.stringify(params)
-      this.downDisabled = true
-      setTimeout(() => {
-        this.downDisabled = false
-      }, 5000)
-      window.location.href = this.reportApi() + '/v3.4/selUserInspectTaskEO?' + params
-    },
     downProjectsFile (ids) {
       let date = this.search.date || []
       let params = {
-        organize_id: ids,
+        project_ids: ids,
         seltype: 2,
         user_name: this.search.name,
         plan_name: this.search.task,
