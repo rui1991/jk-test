@@ -155,24 +155,6 @@ export default{
       this.search.date = this.date
       this.nowSearch.date = this.date
     }
-    // if (this.organizeId) {
-    //   this.downDisabled = false
-    //   if (this.organizeType === 3) {
-    //     this.nameSearch = true
-    //     this.tableLabelName = '任务名称'
-    //     this.tablePropName = 'plan_name'
-    //     this.tablePropRel = 'dutySize'
-    //     // 获取列表详情数据
-    //     this.getListDetData()
-    //   } else {
-    //     this.nameSearch = false
-    //     this.tableLabelName = '机构名称'
-    //     this.tablePropName = 'organize_name'
-    //     this.tablePropRel = 'insSize'
-    //     // 获取列表汇总数据
-    //     this.getListAllData()
-    //   }
-    // }
   },
   components: {
     // orgModule
@@ -567,7 +549,7 @@ export default{
     downProjectsFile (ids) {
       let date = this.search.date || []
       let params = {
-        organize_id: ids,
+        project_ids: ids,
         seltype: 2,
         plan_name: this.search.name,
         start_date: date[0],

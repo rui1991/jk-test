@@ -68,7 +68,6 @@
               <span v-if="scope.row.dtype === 'dwjz'">定位基站</span>
               <span v-else-if="scope.row.dtype === 'cjk'">采集卡</span>
               <span v-else-if="scope.row.dtype === 'sjwg'">数据网关</span>
-              <span v-else-if="scope.row.dtype === 'kqj'">考勤机</span>
             </template>
           </el-table-column>
           <el-table-column label="设备位置">
@@ -183,10 +182,6 @@ export default{
         {
           label: '数据网关',
           value: 'sjwg'
-        },
-        {
-          label: '考勤机',
-          value: 'kqj'
         }
       ],
       stateOptions: [

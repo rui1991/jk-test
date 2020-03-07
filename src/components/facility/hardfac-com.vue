@@ -48,10 +48,6 @@ export default{
         {
           label: '数据网关',
           value: 'sjwg'
-        },
-        {
-          label: '考勤机',
-          value: 'kqj'
         }
       ],
       formLabelWidth: '100px',

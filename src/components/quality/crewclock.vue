@@ -715,7 +715,7 @@ export default{
         return item.organize_type === 1
       })
       // 项目
-      const projectsNode = nodesData.find(item => {
+      const projectsNode = nodesData.filter(item => {
         return item.organize_type === 3
       })
       // 获取列表数据

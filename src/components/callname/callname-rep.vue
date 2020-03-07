@@ -8,8 +8,8 @@
     <el-container class="module-container">
       <el-header class="module-header">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item>人员位置管理</el-breadcrumb-item>
           <el-breadcrumb-item>点名管理</el-breadcrumb-item>
+          <el-breadcrumb-item>点名报表</el-breadcrumb-item>
         </el-breadcrumb>
       </el-header>
       <el-main class="module-main">
