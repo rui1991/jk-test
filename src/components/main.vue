@@ -67,9 +67,6 @@
               <el-menu-item-group v-if="authority.user">
                 <el-menu-item index="/main/user">用户管理</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group v-if="authority.approval">
-                <el-menu-item index="/main/approval">审批管理</el-menu-item>
-              </el-menu-item-group>
             </el-submenu>
             <el-submenu index="2" class="submenu-item" v-if="authority.site">
               <template slot="title"><i class="iconfont icon-shezhi"></i>基础配置</template>

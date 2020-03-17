@@ -26,8 +26,6 @@ const Log = () => import(/* webpackChunkName: "group-log" */ '@/components/profi
 const Organ = () => import(/* webpackChunkName: "group-organ" */ '@/components/company/organ')
 // 用户管理
 const User = () => import(/* webpackChunkName: "group-user" */ '@/components/company/user')
-// 审批列表
-const Approval = () => import(/* webpackChunkName: "group-approval" */ '@/components/company/approval')
 
 /* 基础配置 */
 // 位置管理
@@ -162,14 +160,6 @@ export default new Router({
           path: 'user',
           name: 'user',
           component: User,
-          meta: {
-            keepAlive: false
-          }
-        },
-        {
-          path: 'approval',
-          name: 'approval',
-          component: Approval,
           meta: {
             keepAlive: false
           }
