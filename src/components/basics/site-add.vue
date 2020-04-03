@@ -208,7 +208,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/addPosition',
+        url: '/ezx_jk/addPosition',
         data: params
       }).then((res) => {
         this.disabled = false
@@ -260,7 +260,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selTemplateBySearch',
+        url: '/ezx_jk/inspection/selTemplateBySearch',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

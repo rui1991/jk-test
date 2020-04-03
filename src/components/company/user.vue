@@ -242,7 +242,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selOgzTrees',
+        url: '/ezx_jk/v3.2/selOgzTrees',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -315,7 +315,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selUser',
+        url: '/ezx_jk/v3.2/selUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -368,7 +368,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selRole',
+        url: '/ezx_jk/v3.2/selRole',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -488,7 +488,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v3.2/userEO?' + params
+      window.location.href = '/ezx_jk/v3.2/userEO?' + params
     }
   },
   filters: {

@@ -100,7 +100,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.6/addDutyGroup',
+        url: '/ezx_jk/v2.6/addDutyGroup',
         data: params
       }).then((res) => {
         this.disabled = false

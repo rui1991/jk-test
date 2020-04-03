@@ -233,7 +233,6 @@ export default{
           message: '请重新选择查询范围，不能查询部门报表！',
           type: 'warning'
         })
-        return
       }
     },
     // 获取分公司列表数据
@@ -252,7 +251,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/v3.4/selInspectTask',
+        url: '/ezx_jk/report/v3.4/selInspectTask',
         data: params
       }).then((res) => {
         this.loading = false
@@ -296,7 +295,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/v3.4/selInspectTask',
+        url: '/ezx_jk/report/v3.4/selInspectTask',
         data: params
       }).then((res) => {
         this.loading = false
@@ -339,7 +338,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/v3.4/selInspectTaskPro',
+        url: '/ezx_jk/report/v3.4/selInspectTaskPro',
         data: params
       }).then((res) => {
         this.loading = false
@@ -544,7 +543,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/v3.4/selInspectTaskEO?' + params
+      window.location.href = '/ezx_jk/report/v3.4/selInspectTaskEO?' + params
     },
     downProjectsFile (ids) {
       let date = this.search.date || []
@@ -560,7 +559,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/v3.4/selInspectTaskEO?' + params
+      window.location.href = '/ezx_jk/report/v3.4/selInspectTaskEO?' + params
     },
     downDetFile (id) {
       let date = this.search.date || []
@@ -575,7 +574,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/v3.4/selInspectTaskProEO?' + params
+      window.location.href = '/ezx_jk/report/v3.4/selInspectTaskProEO?' + params
     }
   },
   watch: {

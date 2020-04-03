@@ -52,7 +52,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selTrajectory',
+        url: '/ezx_jk/inspection/selTrajectory',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

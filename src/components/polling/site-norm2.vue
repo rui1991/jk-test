@@ -38,7 +38,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/delPositionTem',
+        url: '/ezx_jk/delPositionTem',
         data: params
       }).then((res) => {
         this.disabled = false

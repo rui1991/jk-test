@@ -60,7 +60,7 @@ export default{
         project_id: this.projectId
       }
       params = this.$qs.stringify(params)
-      const reqUrl = this.sysetApi() + '/upload?' + params
+      const reqUrl = '/ezx_jk/upload?' + params
       this.reqUrl = reqUrl
       // 清空导入文件提示
       this.fileList = []
@@ -99,7 +99,7 @@ export default{
     },
     // 下载模板
     downTemplate () {
-      window.location.href = this.sysetApi() + '/v3.7.3/poModelEO?project_id=' + this.projectId
+      window.location.href = '/ezx_jk/v3.7.3/poModelEO?project_id=' + this.projectId
     },
     // 关闭
     closeClick () {

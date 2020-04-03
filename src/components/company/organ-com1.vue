@@ -99,7 +99,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selUser',
+        url: '/ezx_jk/v3.2/selUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -130,7 +130,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selOrganizeTreeType',
+        url: '/ezx_jk/v3.2/selOrganizeTreeType',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -201,7 +201,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/altOrganizeTree',
+        url: '/ezx_jk/v3.2/altOrganizeTree',
         data: params
       }).then((res) => {
         this.disabled = false

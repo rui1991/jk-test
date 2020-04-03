@@ -88,7 +88,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.5/setCardBind',
+        url: '/ezx_jk/v3.5/setCardBind',
         data: params
       }).then((res) => {
         this.disabled = false

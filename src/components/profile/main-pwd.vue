@@ -125,7 +125,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/judgePWD',
+        url: '/ezx_jk/judgePWD',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -169,7 +169,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/apk/updateUserPass',
+        url: '/ezx_jk/apk/updateUserPass',
         data: params
       }).then((res) => {
         this.disabled = false

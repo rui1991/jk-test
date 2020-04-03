@@ -55,7 +55,7 @@ export default{
         user_id: this.userId
       }
       params = this.$qs.stringify(params)
-      const reqUrl = this.sysetApi() + '/upload?' + params
+      const reqUrl = '/ezx_jk/upload?' + params
       this.reqUrl = reqUrl
       // 清空导入文件提示
       this.fileList = []
@@ -101,7 +101,7 @@ export default{
         base_id: this.parentOrgBase
       }
       params = this.$qs.stringify(params)
-      window.location.href = this.sysetApi() + '/v3.4/userModelEO?' + params
+      window.location.href = '/ezx_jk/v3.4/userModelEO?' + params
     },
     // 关闭
     closeClick () {

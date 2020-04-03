@@ -73,7 +73,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.7/selUserByOgz',
+        url: '/ezx_jk/v3.7/selUserByOgz',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -123,7 +123,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/reqInsTask',
+        url: '/ezx_jk/inspection/reqInsTask',
         data: params
       }).then((res) => {
         this.disabled = false
@@ -165,7 +165,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/v2.1.02/all/alter/alterInsTaskUser',
+        url: '/ezx_jk/inspection/v2.1.02/all/alter/alterInsTaskUser',
         data: params
       }).then((res) => {
         this.disabled = false

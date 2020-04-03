@@ -208,7 +208,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selRollCallResult',
+        url: '/ezx_jk/v2.0/selRollCallResult',
         data: params
       }).then((res) => {
         this.loading = false
@@ -289,7 +289,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/rollCallResultEO?' + params
+      window.location.href = '/ezx_jk/v2.0/rollCallResultEO?' + params
     },
     downAllFile () {
       let date = this.search.date || []
@@ -307,7 +307,7 @@ export default{
       setTimeout(() => {
         this.downAllDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selRollCallReportSummaryEO?' + params
+      window.location.href = '/ezx_jk/v2.0/selRollCallReportSummaryEO?' + params
     },
     /* 点名次数 */
     /* 设置 */

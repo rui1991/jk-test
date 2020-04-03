@@ -89,7 +89,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/audit/selAuditByFromID',
+        url: '/ezx_jk/audit/selAuditByFromID',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

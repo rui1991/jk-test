@@ -135,7 +135,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/v3.7.3/all/sel/selInsTaskOnly',
+        url: '/ezx_jk/inspection/v3.7.3/all/sel/selInsTaskOnly',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -208,7 +208,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/inspection/iDEximport?' + params
+      window.location.href = '/ezx_jk/inspection/iDEximport?' + params
     },
     /* 审批详情 */
     appClose () {

@@ -239,7 +239,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/v3.4/selUserInspectTask',
+        url: '/ezx_jk/report/v3.4/selUserInspectTask',
         data: params
       }).then((res) => {
         this.loading = false
@@ -377,7 +377,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.6/selUserByGroupId',
+        url: '/ezx_jk/v2.6/selUserByGroupId',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -452,7 +452,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/v3.4/selUserInspectTaskEO?' + params
+      window.location.href = '/ezx_jk/report/v3.4/selUserInspectTaskEO?' + params
     }
   },
   watch: {

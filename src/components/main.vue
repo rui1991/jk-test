@@ -200,7 +200,7 @@ export default{
     // 头像
     let iconUrl = this.userPhoto
     if (iconUrl) {
-      iconUrl = this.sysetApi() + '/showImage?state=0&filename=' + iconUrl
+      iconUrl = '/ezx_jk/showImage?state=0&filename=' + iconUrl
     } else {
       iconUrl = initIcon
     }
@@ -243,7 +243,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/switchProject',
+        url: '/ezx_jk/switchProject',
         data: params
       }).then((res) => {
         // 保存用户当前项目
@@ -283,7 +283,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/findNrMyMessageTotal',
+        url: '/ezx_jk/findNrMyMessageTotal',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

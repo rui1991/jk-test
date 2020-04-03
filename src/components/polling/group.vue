@@ -174,7 +174,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.6/selDutyGroupAndUser',
+        url: '/ezx_jk/v2.6/selDutyGroupAndUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

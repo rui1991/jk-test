@@ -163,7 +163,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/findNrMyMessageTotal',
+        url: '/ezx_jk/findNrMyMessageTotal',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -204,7 +204,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.4/selMyMessage',
+        url: '/ezx_jk/v3.4/selMyMessage',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -261,7 +261,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.4/myMessageAllRead',
+        url: '/ezx_jk/v3.4/myMessageAllRead',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -327,7 +327,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/lookMyMessage',
+        url: '/ezx_jk/lookMyMessage',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

@@ -192,7 +192,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/locationTimeStatistics',
+        url: '/ezx_jk/inspection/locationTimeStatistics',
         data: params
       }).then((res) => {
         this.loading = false
@@ -260,7 +260,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/inspection/locationTimeStatisticsEo?' + params
+      window.location.href = '/ezx_jk/inspection/locationTimeStatisticsEo?' + params
     }
   },
   filters: {

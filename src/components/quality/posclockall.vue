@@ -139,7 +139,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.8/selUserRecordMessage',
+        url: '/ezx_jk/v3.8/selUserRecordMessage',
         data: params
       }).then((res) => {
         this.loading = false
@@ -234,7 +234,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v3.8/selUserRecordMessageEO?' + params
+      window.location.href = '/ezx_jk/v3.8/selUserRecordMessageEO?' + params
     }
   },
   filters: {

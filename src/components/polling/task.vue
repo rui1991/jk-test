@@ -317,7 +317,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/v3.7.3/all/sel/selInsTaskSearch',
+        url: '/ezx_jk/inspection/v3.7.3/all/sel/selInsTaskSearch',
         data: params
       }).then((res) => {
         this.loading = false
@@ -418,7 +418,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selOrganizeTree',
+        url: '/ezx_jk/v3.2/selOrganizeTree',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -452,7 +452,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selUser',
+        url: '/ezx_jk/v3.2/selUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -485,7 +485,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.6/selUserByGroupId',
+        url: '/ezx_jk/v2.6/selUserByGroupId',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -533,7 +533,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/reqInsTask',
+        url: '/ezx_jk/inspection/reqInsTask',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -614,7 +614,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/inspection/v2.1.02/pc/imp/inseximport?' + params
+      window.location.href = '/ezx_jk/inspection/v2.1.02/pc/imp/inseximport?' + params
     },
     /* 维护 */
     comClick (id) {

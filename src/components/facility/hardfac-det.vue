@@ -208,7 +208,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/selHardwareOnly',
+        url: '/ezx_jk/hardware/v1.0/selHardwareOnly',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -296,7 +296,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/selHardwarePwOnly',
+        url: '/ezx_jk/hardware/v1.0/selHardwarePwOnly',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -368,7 +368,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/selHardwareVsOnly',
+        url: '/ezx_jk/hardware/v1.0/selHardwareVsOnly',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

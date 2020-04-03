@@ -139,7 +139,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/addOrganizeTree',
+        url: '/ezx_jk/v3.2/addOrganizeTree',
         data: params
       }).then((res) => {
         this.disabled = false

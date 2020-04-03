@@ -6,7 +6,7 @@
         <router-view />
       </div>
     </div>
-    <p class="copy">深圳市黑卡科技有限公司&nbsp;&nbsp;粤ICP备17024484号</p>
+    <p class="copy">深圳市黑卡科技有限公司&nbsp;&nbsp;<a href="http://www.beian.miit.gov.cn" target="_blank">粤ICP备17024484号</a></p>
   </div>
 </template>
 

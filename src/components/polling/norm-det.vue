@@ -69,7 +69,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selTemplateByID',
+        url: '/ezx_jk/inspection/selTemplateByID',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -114,7 +114,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selInsByIds',
+        url: '/ezx_jk/inspection/selInsByIds',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

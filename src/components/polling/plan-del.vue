@@ -42,7 +42,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/delIns',
+        url: '/ezx_jk/inspection/delIns',
         data: params
       }).then((res) => {
         this.disabled = false

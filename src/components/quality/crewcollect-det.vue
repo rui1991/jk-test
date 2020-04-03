@@ -111,7 +111,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + this.requestUrl,
+        url: '/ezx_jk' + this.requestUrl,
         data: params
       }).then((res) => {
         this.loading = false

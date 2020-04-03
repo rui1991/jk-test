@@ -56,7 +56,6 @@
                 </el-select>
               </div>
               <div class="operate">
-                <el-button type="primary" :disabled="qrDisabled" @click="qrDialog = true">生成二维码</el-button>
                 <el-button type="primary" @click="upClick">导入</el-button>
                 <el-button type="primary" :disabled="downDisabled" @click="downFile">导出</el-button>
               </div>
@@ -134,13 +133,6 @@
       @parentUpdata="upUpdata"
       @parentClose="upClose">
     </up-module>
-    <!-- 二维码 -->
-    <qr-module
-      v-show="false"
-      :parentDialog="qrDialog"
-      :parentData="multipleSelection"
-      @parentFinish="qrFinish">
-    </qr-module>
   </div>
 </template>
 
@@ -156,8 +148,6 @@ import comModule from '@/components/basics/site-com'
 import delModule from '@/components/basics/site-del'
 // 引入上传组件
 import upModule from '@/components/basics/site-up'
-// 引入二维码组件
-import qrModule from '@/components/basics/site-qr'
 export default{
   name: 'site',
   data () {
@@ -205,8 +195,6 @@ export default{
       itemId: '',
       upDialog: false,
       downDisabled: false,
-      qrDialog: false,
-      qrDisabled: true,
       loading: false
     }
   },
@@ -219,8 +207,7 @@ export default{
     detModule,
     comModule,
     delModule,
-    upModule,
-    qrModule
+    upModule
   },
   computed: {
     ...mapState('user', [
@@ -243,7 +230,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/selPositionTree628',
+        url: '/ezx_jk/selPositionTree628',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -371,7 +358,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/selPositionChild',
+        url: '/ezx_jk/selPositionChild',
         data: params
       }).then((res) => {
         this.loading = false
@@ -540,11 +527,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/positionEO?' + params
-    },
-    /* 生成二维码 */
-    qrFinish () {
-      this.qrDialog = false
+      window.location.href = '/ezx_jk/positionEO?' + params
     }
   },
   watch: {
@@ -558,10 +541,8 @@ export default{
     multipleSelection (newVal, oldVal) {
       if (newVal.length > 0) {
         this.handleDisabled = false
-        this.qrDisabled = false
       } else {
         this.handleDisabled = true
-        this.qrDisabled = true
       }
     }
   }

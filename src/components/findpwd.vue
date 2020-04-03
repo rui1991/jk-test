@@ -125,7 +125,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/apk/obtainPhoneCode',
+        url: '/ezx_jk/apk/obtainPhoneCode',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -282,7 +282,7 @@ export default{
       this.comDisabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/apk/updateUserPass',
+        url: '/ezx_jk/apk/updateUserPass',
         data: params
       }).then((res) => {
         this.comDisabled = false

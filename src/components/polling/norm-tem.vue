@@ -59,7 +59,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/selInsTree',
+        url: '/ezx_jk/selInsTree',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

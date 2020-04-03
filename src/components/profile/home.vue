@@ -468,7 +468,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.9/selMain',
+        url: '/ezx_jk/v3.9/selMain',
         data: params
       }).then((res) => {
         this.loading = false
@@ -500,7 +500,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.9/selMain',
+        url: '/ezx_jk/v3.9/selMain',
         data: params
       }).then((res) => {
         this.loading = false

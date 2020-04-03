@@ -42,7 +42,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/lookMyMessage',
+        url: '/ezx_jk/lookMyMessage',
         data: params
       }).then((res) => {
         this.disabled = false

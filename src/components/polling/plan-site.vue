@@ -88,7 +88,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/selPositionTree628',
+        url: '/ezx_jk/selPositionTree628',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -233,7 +233,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selInsSetPositions',
+        url: '/ezx_jk/inspection/selInsSetPositions',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

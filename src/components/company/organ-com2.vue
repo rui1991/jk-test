@@ -145,7 +145,7 @@ export default{
         project_id: this.parentBaseId
       }
       params = this.$qs.stringify(params)
-      this.reqUrl = this.sysetApi() + '/upload?' + params
+      this.reqUrl = '/ezx_jk/upload?' + params
       // 获取项目图片
       this.getProjectImg()
     } else if (orgType === 4) {
@@ -195,7 +195,7 @@ export default{
           project_id: this.parentBaseId
         }
         params = this.$qs.stringify(params)
-        this.reqUrl = this.sysetApi() + '/upload?' + params
+        this.reqUrl = '/ezx_jk/upload?' + params
         // 获取项目图片
         this.getProjectImg()
       } else if (orgType === 4) {
@@ -216,7 +216,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selOrganizeTreeType',
+        url: '/ezx_jk/v3.2/selOrganizeTreeType',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -286,7 +286,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/altOrganizeTree',
+        url: '/ezx_jk/v3.2/altOrganizeTree',
         data: params
       }).then((res) => {
         this.disabled = false
@@ -341,13 +341,13 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/selProPicture',
+        url: '/ezx_jk/selProPicture',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
           const imgUrl = res.data.data1 || ''
           if (imgUrl) {
-            this.imgUrl = this.sysetApi() + '/showImage?state=18&filename=' + imgUrl
+            this.imgUrl = '/ezx_jk/showImage?state=18&filename=' + imgUrl
             this.imgBtnTxt = '更换图片'
           } else {
             this.imgUrl = ''
@@ -373,7 +373,7 @@ export default{
     // 上传图片成功
     handleSuccess (res, file, fileList) {
       if (res[0].msg === '0') {
-        this.imgUrl = this.sysetApi() + '/showImage?state=18&filename=' + res[0].filename
+        this.imgUrl = '/ezx_jk/showImage?state=18&filename=' + res[0].filename
         this.imgBtnTxt = '更换图片'
         this.$message({
           showClose: true,
@@ -411,7 +411,7 @@ export default{
           project_id: this.parentBaseId
         }
         params = this.$qs.stringify(params)
-        this.reqUrl = this.sysetApi() + '/upload?' + params
+        this.reqUrl = '/ezx_jk/upload?' + params
         // 获取项目图片
         this.getProjectImg()
       }

@@ -66,7 +66,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selUser',
+        url: '/ezx_jk/v3.2/selUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -99,7 +99,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/selDevicePush',
+        url: '/ezx_jk/hardware/v1.0/selDevicePush',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -143,7 +143,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/setDevicePush',
+        url: '/ezx_jk/hardware/v1.0/setDevicePush',
         data: params
       }).then((res) => {
         this.disabled = false

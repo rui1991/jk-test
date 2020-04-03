@@ -231,7 +231,7 @@ export default{
       this.btnState = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/v3.7.3/all/set/basicSet',
+        url: '/ezx_jk/inspection/v3.7.3/all/set/basicSet',
         data: params
       }).then((res) => {
         this.btnState = false

@@ -131,7 +131,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/selUser',
+        url: '/ezx_jk/v3.2/selUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -180,7 +180,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/apk/findCheckResultNewWeb',
+        url: '/ezx_jk/apk/findCheckResultNewWeb',
         data: params
       }).then((res) => {
         this.loading = false

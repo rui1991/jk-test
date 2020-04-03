@@ -130,7 +130,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/apk/selPositionOnly',
+        url: '/ezx_jk/apk/selPositionOnly',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

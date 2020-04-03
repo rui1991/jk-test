@@ -257,7 +257,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selPoPatrolCoverRate',
+        url: '/ezx_jk/v2.0/selPoPatrolCoverRate',
         data: params
       }).then((res) => {
         this.loading = false
@@ -296,7 +296,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selPoPatrolCoverRate0224',
+        url: '/ezx_jk/v2.0/selPoPatrolCoverRate0224',
         data: params
       }).then((res) => {
         this.loading = false
@@ -335,7 +335,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selProPoPatrolCoverRate',
+        url: '/ezx_jk/v2.0/selProPoPatrolCoverRate',
         data: params
       }).then((res) => {
         this.loading = false
@@ -470,7 +470,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRateEO?' + params
+      window.location.href = '/ezx_jk/v2.0/selPoPatrolCoverRateEO?' + params
     },
     downProjectsFile (ids) {
       let date = this.search.date || []
@@ -485,7 +485,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selPoPatrolCoverRate0224EO?' + params
+      window.location.href = '/ezx_jk/v2.0/selPoPatrolCoverRate0224EO?' + params
     },
     downDetFile (id) {
       let date = this.search.date || []
@@ -500,7 +500,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selProPoPatrolCoverRateEO?' + params
+      window.location.href = '/ezx_jk/v2.0/selProPoPatrolCoverRateEO?' + params
     }
   }
 }

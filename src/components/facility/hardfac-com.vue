@@ -160,7 +160,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/altHardware',
+        url: '/ezx_jk/hardware/v1.0/altHardware',
         data: params
       }).then((res) => {
         this.disabled = false

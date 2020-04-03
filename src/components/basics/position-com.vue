@@ -116,7 +116,7 @@ export default{
   },
   mounted () {
     // 设置上传地址
-    this.reqUrl = this.sysetApi() + '/upload?state=10&user_id' + this.userId
+    this.reqUrl = '/ezx_jk/upload?state=10&user_id' + this.userId
   },
   computed: {
     ...mapState('user', [
@@ -154,7 +154,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/location/v1.0/selLocationByID',
+        url: '/ezx_jk/location/v1.0/selLocationByID',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -173,7 +173,7 @@ export default{
           let upImgText = '上传图片'
           if (picture) {
             upImgText = '重新上传'
-            imgUrl = this.sysetApi() + '/showImage?state=10&filename=' + picture
+            imgUrl = '/ezx_jk/showImage?state=10&filename=' + picture
           }
           this.imgUrl = imgUrl
           this.upImgText = upImgText
@@ -240,7 +240,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/location/v1.0/altLocation',
+        url: '/ezx_jk/location/v1.0/altLocation',
         data: params
       }).then((res) => {
         this.disabled = false
@@ -254,7 +254,7 @@ export default{
           let upImgText = '上传图片'
           if (picture) {
             upImgText = '重新上传'
-            imgUrl = this.sysetApi() + '/showImage?state=10&filename=' + picture
+            imgUrl = '/ezx_jk/showImage?state=10&filename=' + picture
           }
           this.imgUrl = imgUrl
           this.upImgText = upImgText

@@ -264,7 +264,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/hardware/v1.0/selHardwareList',
+        url: '/ezx_jk/hardware/v1.0/selHardwareList',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

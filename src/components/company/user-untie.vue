@@ -41,7 +41,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.5/releaseBind',
+        url: '/ezx_jk/v3.5/releaseBind',
         data: params
       }).then((res) => {
         this.disabled = false

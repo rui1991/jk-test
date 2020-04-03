@@ -126,7 +126,7 @@ export default{
   },
   mounted () {
     // 设置上传地址
-    this.reqUrl = this.sysetApi() + '/upload?state=10&user_id' + this.userId
+    this.reqUrl = '/ezx_jk/upload?state=10&user_id' + this.userId
   },
   computed: {
     ...mapState('user', [
@@ -202,7 +202,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/location/v1.0/addBatchLocation',
+        url: '/ezx_jk/location/v1.0/addBatchLocation',
         data: params
       }).then((res) => {
         this.disabled = false

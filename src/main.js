@@ -31,13 +31,8 @@ import common from '@/utils/common.js'
 // 引入兼容IE插件
 import 'babel-polyfill'
 
-// 引入播放器组件
-import VideoPlayer from 'vue-video-player'
-require('video.js/dist/video-js.css')
-require('vue-video-player/src/custom-theme.css')
-
 // 注册axios
-// axios.defaults.baseURL = 'http://www.allsps.com:82'
+// axios.defaults.baseURL = 'http://szydak.eicp.net:82'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 // axios.defaults.timeout = 60000
 Vue.prototype.$axios = axios
@@ -51,9 +46,6 @@ Vue.use(ElementUI)
 // 注册echarts
 Vue.prototype.$echarts = echarts
 
-// 注册播放器组件
-Vue.use(VideoPlayer)
-
 // 注册全局过滤器
 Object.keys(custom).forEach(key => {
   Vue.filter(key, custom[key])
@@ -62,34 +54,13 @@ Object.keys(custom).forEach(key => {
 // 注册全局方法
 Vue.prototype.$common = common
 
-// 配置公共变量
-Vue.prototype.baseUrl = () => 'http://szydak.eicp.net:82'
-Vue.prototype.sysetApi = () => 'http://szydak.eicp.net:82/ezx_jk'
-Vue.prototype.reportApi = () => 'http://szydak.eicp.net:82/ezx_jk/report'
-Vue.prototype.loraApi = () => 'http://szydak.eicp.net:8099'
-
-// Vue.prototype.reportApi = () => '/apiUrl/ezx_jk/report'
-
-// Vue.prototype.baseUrl = () => 'http://192.168.1.177:8080'
-// Vue.prototype.sysetApi = () => 'http://192.168.1.177:8080/ezx_jk'
-// // Vue.prototype.sysetApi = () => 'http://szydak.eicp.net:82/ezx_syset'
-// Vue.prototype.reportApi = () => 'http://192.168.1.177:8089'
-// Vue.prototype.loraApi = () => 'http://192.168.1.177:8099'
-
-// Vue.prototype.baseUrl = () => 'http://www.allsps.com'
-// Vue.prototype.sysetApi = () => 'http://www.allsps.com/ezx_syset'
-// Vue.prototype.reportApi = () => 'http://www.allsps.com:8089'
-// Vue.prototype.loraApi = () => 'http://www.bczdd.com:8099'
-
 Vue.config.productionTip = false
 
 // 注册请求拦截器
 axios.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('wxWebToken')
   const userId = store.state.user.userId
-  const newUrl = config.url
-  // const reqMethod = config.method.toLowerCase()
-  if (token && newUrl.indexOf(':8089') === -1 && newUrl.indexOf(':8099') === -1) {
+  if (token) {
     config.headers.token = token
     config.headers.user_id = userId
   }

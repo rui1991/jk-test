@@ -118,7 +118,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/addTemplate',
+        url: '/ezx_jk/inspection/addTemplate',
         data: params
       }).then((res) => {
         this.disabled = false
@@ -165,7 +165,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selInsByIds',
+        url: '/ezx_jk/inspection/selInsByIds',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

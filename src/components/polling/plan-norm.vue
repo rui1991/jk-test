@@ -105,7 +105,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selInsSetPositionsTemplate',
+        url: '/ezx_jk/inspection/selInsSetPositionsTemplate',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

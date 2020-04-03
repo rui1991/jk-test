@@ -306,7 +306,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selRollCallReport823',
+        url: '/ezx_jk/v2.0/selRollCallReport823',
         data: params
       }).then((res) => {
         this.loading = false
@@ -345,7 +345,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selRollCallReport0224',
+        url: '/ezx_jk/v2.0/selRollCallReport0224',
         data: params
       }).then((res) => {
         this.loading = false
@@ -388,7 +388,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v2.0/selRollCallReport',
+        url: '/ezx_jk/v2.0/selRollCallReport',
         data: params
       }).then((res) => {
         this.loading = false
@@ -754,7 +754,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selRollCallReport823EO?' + params
+      window.location.href = '/ezx_jk/v2.0/selRollCallReport823EO?' + params
     },
     downProjectsFile (ids) {
       let date = this.search.date || []
@@ -769,7 +769,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selRollCallReport0224EO?' + params
+      window.location.href = '/ezx_jk/v2.0/selRollCallReport0224EO?' + params
     },
     downDetFile (id) {
       let date = this.search.date || []
@@ -788,7 +788,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v2.0/selRollCallReportEO?' + params
+      window.location.href = '/ezx_jk/v2.0/selRollCallReportEO?' + params
     }
   },
   filters: {

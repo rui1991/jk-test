@@ -83,7 +83,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/apk/obtainPhoneCode',
+        url: '/ezx_jk/apk/obtainPhoneCode',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -179,7 +179,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.2/login',
+        url: '/ezx_jk/v3.2/login',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

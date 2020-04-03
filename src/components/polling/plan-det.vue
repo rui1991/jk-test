@@ -161,7 +161,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/v3.7.3/selInsOnly',
+        url: '/ezx_jk/inspection/v3.7.3/selInsOnly',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -283,7 +283,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selInsSetPositionsTemplate',
+        url: '/ezx_jk/inspection/selInsSetPositionsTemplate',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {

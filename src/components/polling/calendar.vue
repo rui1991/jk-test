@@ -130,7 +130,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selInsMonthCalendar',
+        url: '/ezx_jk/inspection/selInsMonthCalendar',
         data: params
       }).then((res) => {
         this.loading = false

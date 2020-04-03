@@ -191,7 +191,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.reportApi() + '/v3.4/selInspectPosition',
+        url: '/ezx_jk/report/v3.4/selInspectPosition',
         data: params
       }).then((res) => {
         this.loading = false
@@ -275,7 +275,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.reportApi() + '/v3.4/selInspectPositionEO?' + params
+      window.location.href = '/ezx_jk/report/v3.4/selInspectPositionEO?' + params
     }
   },
   watch: {

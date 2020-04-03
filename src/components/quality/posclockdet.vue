@@ -155,7 +155,7 @@ export default{
       this.loading = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.7/selUserRecordMessageChildren',
+        url: '/ezx_jk/v3.7/selUserRecordMessageChildren',
         data: params
       }).then((res) => {
         this.loading = false
@@ -252,7 +252,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.7/selRollCallChildUser',
+        url: '/ezx_jk/v3.7/selRollCallChildUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -291,7 +291,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/v3.7/setRollCallChildUser',
+        url: '/ezx_jk/v3.7/setRollCallChildUser',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -332,7 +332,7 @@ export default{
       setTimeout(() => {
         this.downDisabled = false
       }, 5000)
-      window.location.href = this.sysetApi() + '/v3.7/selUserRecordMessageChildrenEO?' + params
+      window.location.href = '/ezx_jk/v3.7/selUserRecordMessageChildrenEO?' + params
     }
   },
   filters: {

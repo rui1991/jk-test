@@ -63,7 +63,7 @@ export default{
       params = this.$qs.stringify(params)
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/inspection/selTemplateBySearch',
+        url: '/ezx_jk/inspection/selTemplateBySearch',
         data: params
       }).then((res) => {
         if (res.data.result === 'Sucess') {
@@ -99,7 +99,7 @@ export default{
       this.disabled = true
       this.$axios({
         method: 'post',
-        url: this.sysetApi() + '/addPositionTem',
+        url: '/ezx_jk/addPositionTem',
         data: params
       }).then((res) => {
         this.disabled = false
