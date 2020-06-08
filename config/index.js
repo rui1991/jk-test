@@ -10,11 +10,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/ezx_jk': {
-        // target: 'http://www.allsps.com',
-        // target: 'http://szydak.eicp.net:82',
         target: 'http://192.168.1.199:82',
         changeOrigin: true,
-        pathRewrite: {  // 需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
+        pathRewrite: {
           '^/ezx_jk': '/ezx_syset'
         }
       }

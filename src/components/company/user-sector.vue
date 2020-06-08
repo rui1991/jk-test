@@ -3,10 +3,10 @@
     <el-tree
       :data="treeData"
       show-checkbox
-      default-expand-all
       check-strictly
       node-key="id"
       ref="tree"
+      check-on-click-node
       @check-change="checkChange"
       :props="defaultProps">
     </el-tree>
@@ -117,6 +117,7 @@ export default{
     // 选择
     checkChange (data, checked, self) {
       if (checked === true) {
+        if (this.checkedOrgId === data.id) return
         this.checkedOrgId = data.id
         this.checkedId = data.base_id
         this.checkedName = data.name
@@ -129,8 +130,8 @@ export default{
     },
     // 确定
     confirmClick () {
-      const id = this.checkedId || ''
-      const name = this.checkedName || ''
+      const id = this.checkedId
+      const name = this.checkedName
       const obj = {
         id,
         name

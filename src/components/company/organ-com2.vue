@@ -63,6 +63,8 @@
     <!-- 上级机构 -->
     <parent-module
       :parentDialog="parDialog"
+      :parentName="formData.parentName"
+      :parentId="formData.parentId"
       @parentUpdata="parUpdata"
       @parentCancel="parCancel">
     </parent-module>

@@ -2,11 +2,13 @@
   <el-dialog title="选择上级机构" :visible.sync="parentDialog" :show-close="false" :close-on-click-modal="false" custom-class="medium-dialog">
     <el-tree
       :data="treeData"
-      :highlight-current="highlight"
-      default-expand-all
+      show-checkbox
+      check-strictly
+      check-on-click-node
       node-key="id"
-      :props="defaultProps"
-      @node-click="handleNodeClick">
+      ref="tree"
+      @check-change="orgCheckChange"
+      :props="defaultProps">
     </el-tree>
     <div slot="footer" class="dialog-footer">
       <el-button @click="cancelClick">取 消</el-button>
@@ -18,7 +20,7 @@
 <script>
 import { mapState } from 'vuex'
 export default{
-  props: ['parentDialog'],
+  props: ['parentDialog', 'parentName', 'parentId'],
   data () {
     return {
       treeData: [],
@@ -26,7 +28,6 @@ export default{
         children: 'children',
         label: 'name'
       },
-      highlight: false,
       checkedId: 0,
       checkedName: '',
       disabled: true
@@ -43,12 +44,16 @@ export default{
   methods: {
     // 初始化数据
     parentInit () {
-      this.highlight = false
-      this.checkedId = ''
-      this.checkedName = ''
       if (this.treeData.length === 0) {
         // 获取组织树
         this.getOrganTree()
+      } else {
+        const id = this.parentId
+        this.checkedId = id
+        this.checkedName = this.parentName
+        setTimeout(() => {
+          this.$refs.tree.setCheckedKeys([id])
+        }, 100)
       }
     },
     // 获取组织树
@@ -65,10 +70,13 @@ export default{
         if (res.data.result === 'Sucess') {
           // 组织树
           let treeData = res.data.data1
-          if (treeData[0].organize_type === 0) {
-            treeData = treeData[0].children
-          }
-          this.treeData = treeData
+          this.treeData = this.recOrganData(treeData)
+          const id = this.parentId
+          this.checkedId = id
+          this.checkedName = this.parentName
+          setTimeout(() => {
+            this.$refs.tree.setCheckedKeys([id])
+          }, 100)
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)
           this.$message({
@@ -85,17 +93,31 @@ export default{
         })
       })
     },
+    // 设置项目部门不可选
+    recOrganData (data) {
+      data.forEach((item, index, array) => {
+        if (item.organize_type === 3 || item.organize_type === 4) {
+          item.disabled = true
+        }
+        if (item.children) {
+          this.recOrganData(item.children)
+        }
+      })
+      return data
+    },
     // 点击节点
-    handleNodeClick (data) {
-      const type = data.organize_type
-      if (type === 1 || type === 2) {
-        this.highlight = true
+    orgCheckChange (data, checked, self) {
+      if (checked === true) {
+        if (this.checkedId === data.id) {
+          return
+        }
         this.checkedId = data.id
         this.checkedName = data.name
+        this.$refs.tree.setCheckedKeys([data.id])
       } else {
-        this.highlight = false
-        this.checkedId = ''
-        this.checkedName = ''
+        if (this.checkedId === data.id) {
+          this.$refs.tree.setCheckedKeys([data.id])
+        }
       }
     },
     // 确定

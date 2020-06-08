@@ -19,7 +19,6 @@
             :data="orgTree"
             ref="tree"
             show-checkbox
-            default-expand-all
             node-key="id"
             :props="defaultProps">
           </el-tree>

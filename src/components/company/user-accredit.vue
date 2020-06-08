@@ -4,7 +4,6 @@
       :data="treeData"
       ref="tree"
       show-checkbox
-      default-expand-all
       check-strictly
       check-on-click-node
       node-key="id"

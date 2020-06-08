@@ -3,7 +3,6 @@
     :data="orgData"
     ref="tree"
     show-checkbox
-    default-expand-all
     check-strictly
     node-key="id"
     @check-change="orgCheckChange"

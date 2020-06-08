@@ -12,7 +12,6 @@
           <el-tree
             :data="orgTree"
             :highlight-current="true"
-            default-expand-all
             node-key="id"
             :props="defaultProps"
             @node-click="handleNodeClick">

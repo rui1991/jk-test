@@ -32,7 +32,7 @@ import common from '@/utils/common.js'
 import 'babel-polyfill'
 
 // 注册axios
-// axios.defaults.baseURL = 'http://szydak.eicp.net:82'
+// axios.defaults.baseURL = 'http://192.168.1.199:82'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 // axios.defaults.timeout = 60000
 Vue.prototype.$axios = axios

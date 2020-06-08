@@ -15,9 +15,7 @@
     "js-md5": "^0.7.3",
     "sortablejs": "^1.7.0",
     "vue": "^2.5.2",
-    "vue-qr": "^1.5.2",
     "vue-router": "^3.0.1",
-    "vue-video-player": "^5.0.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
