@@ -17,7 +17,7 @@
               </el-option>
             </el-select>
           </div>
-          <div class="nav-item" v-if="authority.log">
+          <div class="nav-item" v-if="authority.user">
             <router-link class="log" to="/main/log"><i class="iconfont icon-log" style="font-size: 32px;"></i></router-link>
           </div>
           <div class="nav-item">
@@ -59,7 +59,7 @@
               <i class="iconfont icon-yemian-copy-copy-copy-copy"></i>
               <span slot="title" style="font-size: 18px;">首页</span>
             </el-menu-item>
-            <el-submenu index="1" class="submenu-item" v-if="authority.organ || authority.user || authority.shift || authority.approval">
+            <el-submenu index="1" class="submenu-item" v-if="authority.user">
               <template slot="title"><i class="iconfont icon-qiye"></i>企业配置</template>
               <el-menu-item-group v-if="authority.organ">
                 <el-menu-item index="/main/organ">组织管理</el-menu-item>
@@ -68,7 +68,7 @@
                 <el-menu-item index="/main/user">用户管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="2" class="submenu-item" v-if="authority.site">
+            <el-submenu index="2" class="submenu-item" v-if="authority.user">
               <template slot="title"><i class="iconfont icon-shezhi"></i>基础配置</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/position">位置管理</el-menu-item>
@@ -77,7 +77,7 @@
                 <el-menu-item index="/main/site">地址管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="3" class="submenu-item" v-if="authority.plan">
+            <el-submenu index="3" class="submenu-item" v-if="authority.user">
               <template slot="title"><i class="iconfont icon-pinzhibaozhang"></i>品质过程管理</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/crewclock">人员打卡率报表</el-menu-item>
@@ -97,55 +97,43 @@
             </el-submenu>
             <el-submenu index="4" class="submenu-item">
               <template slot="title"><i class="iconfont icon-xunjianguanli"></i>巡检巡查</template>
-              <el-menu-item-group v-if="authority.plan">
+              <el-menu-item-group v-if="authority.user">
                 <el-menu-item index="/main/group">组管理</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group v-if="authority.plan">
+              <el-menu-item-group v-if="authority.user">
                 <el-menu-item index="/main/plan">巡检计划管理</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group v-if="authority.task">
+              <el-menu-item-group>
                 <el-menu-item index="/main/task">巡检任务</el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group>
                 <el-menu-item index="/main/calendar">巡检日历</el-menu-item>
               </el-menu-item-group>
-             <!-- <el-menu-item-group v-if="authority.norm">
-                <el-menu-item index="/main/norm">巡检标准维护</el-menu-item>
-              </el-menu-item-group>-->
             </el-submenu>
-            <!--<el-submenu index="5" class="submenu-item" v-if="authority.plan">-->
-              <!--<template slot="title"><i class="iconfont icon-guding"></i>固定岗管理</template>-->
-              <!--<el-menu-item-group>-->
-                <!--<el-menu-item index="/main/fixedpost-rep">固定岗打卡报表</el-menu-item>-->
-              <!--</el-menu-item-group>-->
-              <!--<el-menu-item-group>-->
-                <!--<el-menu-item index="/main/fixedpost-log">固定岗打卡记录</el-menu-item>-->
-              <!--</el-menu-item-group>-->
-            <!--</el-submenu>-->
-            <el-submenu index="6" class="submenu-item" v-if="authority.plan">
+            <el-submenu index="5" class="submenu-item" v-if="authority.user">
               <template slot="title"><i class="iconfont icon-dianmin"></i>点名管理</template>
-              <el-menu-item-group v-if="authority.plan">
+              <el-menu-item-group>
                 <el-menu-item index="/main/callname-set">点名设置</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group v-if="authority.plan">
+              <el-menu-item-group>
                 <el-menu-item index="/main/callname-rep">点名报表</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="7" class="submenu-item" v-if="authority.polcard">
+            <el-submenu index="6" class="submenu-item" v-if="authority.user">
               <template slot="title"><i class="iconfont icon-shebeiguanli1"></i>设备管理</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/hardfac">硬件设备管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="8" class="submenu-item" v-if="authority.polReport || authority.workReport">
+            <el-submenu index="7" class="submenu-item" v-if="authority.user">
               <template slot="title"><i class="iconfont icon-baobiaoguanli"></i>报表管理</template>
-              <el-menu-item-group v-if="authority.polReport">
+              <el-menu-item-group>
                 <el-menu-item index="/main/report-task">巡检任务执行报表</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group v-if="authority.polReport">
+              <el-menu-item-group>
                 <el-menu-item index="/main/report-site">巡检地址信息报表</el-menu-item>
               </el-menu-item-group>
-              <el-menu-item-group v-if="authority.polReport">
+              <el-menu-item-group>
                 <el-menu-item index="/main/report-staff">个人巡检执行报表</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
@@ -188,8 +176,7 @@ export default{
       iconUrl: '',
       introDialog: false,
       pwdDialog: false,
-      nowProjectId: 0,
-      deviceUid: [1, 2, 816, 819, 830]
+      nowProjectId: 0
     }
   },
   created () {

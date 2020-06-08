@@ -10,43 +10,7 @@ const state = {
   userPhoto: '',
   authority: {
     organ: false,
-    log: false,
-    user: false,
-    shift: false,
-    scheduling: false,
-    approval: false,
-    site: false,
-    plan: false,
-    task: false,
-    calendar: false,
-    norm: false,
-    abnormal: false,
-    work: false,
-    rule: false,
-    polcard: false,
-    polReport: false,
-    workReport: false,
-    videoSetting: false,
-    videoPlaza: false,
-    event: false
-  },
-  autDet: {
-    organ: [],
-    user: [],
-    crew: [],
-    shift: [],
-    scheduling: [],
-    approval: [],
-    site: [],
-    plan: [],
-    task: [],
-    calendar: [],
-    norm: [],
-    abnormal: [],
-    work: [],
-    rule: [],
-    polcard: [],
-    event: []
+    user: false
   }
 }
 
@@ -69,10 +33,6 @@ const mutations = {
   // 保存模块权限
   SET_MOD_AUTHORITY (state, obj) {
     state.authority = obj
-  },
-  // 保存权限详情
-  SET_DET_AUTHORITY (state, obj) {
-    state.autDet = obj
   }
 }
 
@@ -84,10 +44,6 @@ const actions = {
   // 保存模块权限
   setModAuthority ({ commit }, value) {
     commit('SET_MOD_AUTHORITY', value)
-  },
-  // 保存权限详情
-  setDetAuthority ({ commit }, value) {
-    commit('SET_DET_AUTHORITY', value)
   }
 }
 

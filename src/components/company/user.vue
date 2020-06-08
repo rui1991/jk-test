@@ -61,8 +61,8 @@
               <template slot-scope="scope">
                 <a href="javascript:void(0);" class="operate com" @click="bindClick(scope.row.user_id, scope.row.project_id)" v-if="scope.row.project_id && !scope.row.card_mac">绑卡</a>
                 <a href="javascript:void(0);" class="operate del" @click="untieClick(scope.row.user_id, scope.row.project_id, scope.row.card_mac)" v-if="scope.row.project_id && scope.row.card_mac">解绑</a>
-                <a href="javascript:void(0);" class="operate com" @click="comClick(scope.row.user_id)" v-if="authority.com">编辑</a>
-                <a href="javascript:void(0);" class="operate del" @click="delClick(scope.row.user_id)" v-if="authority.del">删除</a>
+                <a href="javascript:void(0);" class="operate com" @click="comClick(scope.row.user_id)">编辑</a>
+                <a href="javascript:void(0);" class="operate del" @click="delClick(scope.row.user_id)" v-if="roleId !== 502">删除</a>
               </template>
             </el-table-column>
           </el-table>
@@ -161,11 +161,6 @@ export default{
   name: 'cuser',
   data () {
     return {
-      authority: {
-        add: true,
-        com: true,
-        del: true
-      },
       search: {
         name: '',
         phone: '',
@@ -209,11 +204,6 @@ export default{
     this.getOrganTree()
     // 获取角色
     this.getRoleOptions()
-    // 权限
-    let autDet = this.autDet
-    autDet.indexOf(15) === -1 ? this.authority.add = false : this.authority.add = true
-    autDet.indexOf(16) === -1 ? this.authority.com = false : this.authority.com = true
-    autDet.indexOf(17) === -1 ? this.authority.del = false : this.authority.del = true
   },
   components: {
     addModule,
@@ -227,11 +217,9 @@ export default{
   computed: {
     ...mapState('user', [
       'companyId',
-      'userId'
-    ]),
-    ...mapState('user', {
-      autDet: state => state.autDet.user
-    })
+      'userId',
+      'roleId'
+    ])
   },
   methods: {
     // 获取组织树

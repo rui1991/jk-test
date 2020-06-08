@@ -47,8 +47,7 @@ export default{
   methods: {
     ...mapActions('user', [
       'setUserInfo',
-      'setModAuthority',
-      'setDetAuthority'
+      'setModAuthority'
     ]),
     ...mapActions('other', [
       'setAllProject',
@@ -256,137 +255,22 @@ export default{
           }
           this.setNowProject(project)
           /* 存储权限 */
-          const userAuts = loginData.permissions
-          let authority = {
-            organ: false,
-            log: false,
-            user: false,
-            shift: false,
-            scheduling: false,
-            approval: false,
-            site: false,
-            plan: false,
-            task: false,
-            calendar: false,
-            norm: false,
-            abnormal: false,
-            work: false,
-            rule: false,
-            polcard: false,
-            polReport: false,
-            workReport: false,
-            videoSetting: false,
-            videoPlaza: false,
-            event: false
-          }
+          // 500, 501, 502, 503
           // 组织结构管理
-          let autOrgan = []
+          let autOrgan = false
+          if (roleId === 500) {
+            autOrgan = true
+          }
           // 用户管理
-          let autUser = []
-          // 编制排班
-          let autShift = []
-          // 排班管理
-          let autScheduling = []
-          // 审批列表
-          let autApproval = []
-          // 地址管理
-          let autSite = []
-          // 巡检计划管理
-          let autPlan = []
-          // 巡检任务
-          let autTask = []
-          // 巡检日历
-          let autCalendar = []
-          // 巡检标准维护
-          let autNorm = []
-          // 巡检异常
-          let autAbnormal = []
-          // 工单列表
-          let autWork = []
-          // 异常处理规则设置
-          let autRule = []
-          // 巡检绑卡管理
-          let autPolcard = []
-          // 事件列表
-          let autEvent = []
-          userAuts.forEach(item => {
-            if (item.function_id === 3 || item.function_id === 4 || item.function_id === 5) { // 组织结构管理
-              authority.organ = true
-              autOrgan.push(item.function_id)
-            } else if (item.function_id === 18) { // 日志管理
-              authority.log = true
-            } else if (item.function_id === 15 || item.function_id === 16 || item.function_id === 17) { // 用户管理
-              authority.user = true
-              autUser.push(item.function_id)
-            } else if (item.function_id === 26 || item.function_id === 27 || item.function_id === 28) { // 地址管理
-              authority.site = true
-              autSite.push(item.function_id)
-            } else if (item.function_id === 30 || item.function_id === 31 || item.function_id === 34) { // 巡检计划管理
-              authority.plan = true
-              autPlan.push(item.function_id)
-            } else if (item.function_id === 36 || item.function_id === 37 || item.function_id === 38 || item.function_id === 39) { // 巡检任务
-              authority.task = true
-              autTask.push(item.function_id)
-            } else if (item.function_id === 40) { // 巡检日历
-              authority.calendar = true
-              autCalendar.push(item.function_id)
-            } else if (item.function_id === 42 || item.function_id === 44 || item.function_id === 45) { // 巡检标准维护
-              authority.norm = true
-              autNorm.push(item.function_id)
-            } else if (item.function_id === 47 || item.function_id === 181) { // 巡检异常
-              authority.abnormal = true
-              autAbnormal.push(item.function_id)
-            } else if (item.function_id === 50 || item.function_id === 51 || item.function_id === 52 || item.function_id === 53 || item.function_id === 54) { // 工单列表
-              authority.work = true
-              autWork.push(item.function_id)
-            } else if (item.function_id === 182 || item.function_id === 183 || item.function_id === 184) { // 异常处理规则设置
-              authority.rule = true
-              autRule.push(item.function_id)
-            } else if (item.function_id === 187 || item.function_id === 188 || item.function_id === 189) { // 编制排班
-              authority.shift = true
-              autShift.push(item.function_id)
-            } else if (item.function_id === 190 || item.function_id === 191) { // 排班管理
-              authority.scheduling = true
-              autScheduling.push(item.function_id)
-            } else if (item.function_id === 62) { // 审批列表
-              authority.approval = true
-              autApproval.push(item.function_id)
-            } else if (item.function_id === 21 || item.function_id === 22) { // 巡检绑卡管理
-              authority.polcard = true
-              autPolcard.push(item.function_id)
-            } else if (item.function_id === 192) { // 巡检报表
-              authority.polReport = true
-            } else if (item.function_id === 193) { // 工单报表
-              authority.workReport = true
-            } else if (item.function_id === 206) { // 视频监控设置
-              authority.videoSetting = true
-            } else if (item.function_id === 207) { // 视频广场
-              authority.videoPlaza = true
-            } else if (item.function_id === 78 || item.function_id === 79 || item.function_id === 80 || item.function_id === 81 || item.function_id === 82) { // 事件列表
-              authority.event = true
-              autEvent.push(item.function_id)
-            }
-          })
-          // 存储权限
-          this.setModAuthority(authority)
+          let autUser = false
+          if (roleId !== 503) {
+            autUser = true
+          }
           const autDet = {
             organ: autOrgan,
-            user: autUser,
-            shift: autShift,
-            scheduling: autScheduling,
-            approval: autApproval,
-            site: autSite,
-            plan: autPlan,
-            task: autTask,
-            calendar: autCalendar,
-            norm: autNorm,
-            abnormal: autAbnormal,
-            work: autWork,
-            rule: autRule,
-            polcard: autPolcard,
-            event: autEvent
+            user: autUser
           }
-          this.setDetAuthority(autDet)
+          this.setModAuthority(autDet)
           // 保存机构树
           let orgTree = loginData.trees
           if (orgTree[0].organize_type === 0) {
@@ -394,7 +278,7 @@ export default{
           }
           this.setOrganTree(orgTree)
           // 处理部门
-          let orgData = this.initDisSecTree(JSON.parse(JSON.stringify(orgTree)))
+          let orgData = this.recOrganData(JSON.parse(JSON.stringify(orgTree)))
           this.setOrganData(orgData)
           // 路由跳转
           this.$router.push({ path: '/main/home' })
@@ -415,26 +299,16 @@ export default{
       })
     },
     // 初始化处理部门
-    initDisSecTree (treeData) {
-      treeData.forEach((item, index, array) => {
-        if (item.organize_type === 4) {
-          item.disabled = true
-        }
-        if (item.children) {
-          this.initRecSecTree(item.children)
-        }
-      })
-      return treeData
-    },
-    initRecSecTree (data) {
+    recOrganData (data) {
       data.forEach((item, index, array) => {
         if (item.organize_type === 4) {
           item.disabled = true
         }
         if (item.children) {
-          this.initRecSecTree(item.children)
+          this.recOrganData(item.children)
         }
       })
+      return data
     }
   },
   watch: {

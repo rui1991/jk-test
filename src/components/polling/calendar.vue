@@ -91,11 +91,9 @@ export default{
   },
   computed: {
     ...mapState('user', [
-      'userId'
+      'userId',
+      'roleId'
     ]),
-    ...mapState('user', {
-      authority: state => state.authority.calendar
-    }),
     ...mapState('other', [
       'companyId',
       'projectId'
@@ -111,7 +109,7 @@ export default{
     getCalendarData () {
       this.loading = true
       let params = {}
-      if (this.authority) {
+      if (this.roleId !== 503) {
         params = {
           company_id: this.companyId,
           user_id: this.userId,
