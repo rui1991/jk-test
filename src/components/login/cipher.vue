@@ -2,7 +2,7 @@
   <div class="cipher">
     <div class="item">
       <div class="item-content">
-        <span class="iconfont icon-yonghu"></span>
+        <span class="iconfont iconyonghu"></span>
         <div class="item-input">
           <input type="text" class="input" v-model.trim="phone" placeholder="请输账号">
         </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="item">
       <div class="item-content">
-        <span class="iconfont icon-mima"></span>
+        <span class="iconfont iconmima"></span>
         <div class="item-input">
           <input type="password" class="input" v-model.trim="password" @keyup.enter.native= "enterEvent" placeholder="请输密码">
         </div>

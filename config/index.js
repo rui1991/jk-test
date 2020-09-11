@@ -10,10 +10,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/ezx_jk': {
-        target: 'http://192.168.1.199:82',
+        target: 'https://black-card.tq-service.com',
+        // target: 'http://www.allsps.com:8900',
         changeOrigin: true,
         pathRewrite: {
-          '^/ezx_jk': '/ezx_syset'
+          '^/ezx_jk': ''
         }
       }
     },

@@ -14,12 +14,21 @@
       </el-header>
       <el-container class="module-content">
         <el-aside width="280px" class="module-aside">
+          <div style="padding: 5px;">
+            <el-input
+              placeholder="输入关键字进行过滤"
+              clearable
+              v-model="filterText">
+            </el-input>
+          </div>
           <!-- 组织树 -->
           <el-tree
             :data="orgTree"
             ref="tree"
             show-checkbox
             node-key="id"
+            check-on-click-node
+            :filter-node-method="filterNode"
             :props="defaultProps">
           </el-tree>
         </el-aside>
@@ -100,13 +109,15 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 // 引入组织树组件
 // import orgModule from '@/components/report/report-org'
 export default{
   name: 'reportTask',
   data () {
     return {
+      filterText: '',
+      organizeType: 0,
       search: {
         date: [],
         name: ''
@@ -128,8 +139,6 @@ export default{
       nameSearch: false,
       tableAllData: [],
       tableData: [],
-      // tableAllData: [],
-      // tableDetData: [],
       tableLabelName: '机构名称',
       tablePropName: 'organize_name',
       tablePropRel: 'insSize',
@@ -146,14 +155,8 @@ export default{
   mounted () {
     // 时段
     const nowDate = this.$common.getNowDate('yyyy-mm-dd')
-    if (this.date.length === 0) {
-      this.search.date = [nowDate, nowDate]
-      this.nowSearch.date = [nowDate, nowDate]
-      this.setReportDate([nowDate, nowDate])
-    } else {
-      this.search.date = this.date
-      this.nowSearch.date = this.date
-    }
+    this.search.date = [nowDate, nowDate]
+    this.nowSearch.date = [nowDate, nowDate]
   },
   components: {
     // orgModule
@@ -164,18 +167,39 @@ export default{
     ]),
     ...mapState('other', [
       'orgTree'
-    ]),
-    ...mapState('report', [
-      'organizeId',
-      'organizeType',
-      'projectId',
-      'date'
     ])
   },
   methods: {
-    ...mapActions('report', [
-      'setReportDate'
-    ]),
+    // 触发页面显示配置的筛选
+    filterNode (value, data, node) {
+      // 如果什么都没填就直接返回
+      if (!value) return true
+      // 如果传入的value和data中的label相同说明是匹配到了
+      if (data.name.indexOf(value) !== -1) return true
+      // 否则要去判断它是不是选中节点的子节点
+      return this.checkBelongNode(value, data, node)
+    },
+    // 判断传入的节点是不是选中节点的子节点
+    checkBelongNode (value, data, node) {
+      const level = node.level
+      // 如果传入的节点本身就是一级节点就不用校验了
+      if (level === 1) return false
+      // 先取当前节点的父节点
+      let parentData = node.parent
+      // 遍历当前节点的父节点
+      let index = 0
+      while (index < level - 1) {
+        // 如果匹配到直接返回
+        if (parentData.data.name.indexOf(value) !== -1) {
+          return true
+        }
+        // 否则的话再往上一层做匹配
+        parentData = parentData.parent
+        index++
+      }
+      // 没匹配到返回false
+      return false
+    },
     // 搜索
     searchList () {
       this.search = JSON.parse(JSON.stringify(this.nowSearch))
@@ -456,13 +480,13 @@ export default{
       this.limit = limit
       // 初始化页码
       this.nowPage = 1
-      if (this.organizeType === 3) {
+      if (this.itemProject) {
         // 查询范围条件判断
         this.orgDispose()
       } else {
         // 获取列表
-        const start = this.nowPage * limit - limit
-        const end = this.nowPage * limit
+        const start = 0
+        const end = this.limit
         const tableData = this.tableAllData.slice(start, end)
         this.tableData = tableData
       }
@@ -525,7 +549,6 @@ export default{
           message: '请重新选择导出范围，不能导出部门报表！',
           type: 'warning'
         })
-        return
       }
     },
     downAllFile (id, type) {
@@ -577,6 +600,9 @@ export default{
     }
   },
   watch: {
+    filterText (val, oldVal) {
+      this.$refs.tree.filter(val)
+    },
     itemProject (val, oldVal) {
       if (val) {
         this.nameSearch = true

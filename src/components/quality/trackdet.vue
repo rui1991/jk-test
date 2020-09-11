@@ -52,6 +52,11 @@
               <span>{{ scope.row.check_time | formatDate }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="上传时间">
+            <template slot-scope="scope">
+              <span>{{ scope.row.upload_time | formatDate }}</span>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           background

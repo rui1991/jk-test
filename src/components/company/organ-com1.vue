@@ -17,28 +17,15 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="坐标" prop="coord">
-        <el-input :disabled="true" v-model="formData.coord" style="width: 360px; margin-right: 20px;"></el-input>
-        <el-button type="primary" @click="mapDialog = true">选择坐标</el-button>
-      </el-form-item>
     </el-form>
     <div class="module-operate">
       <el-button type="primary" :disabled="disabled" @click="submitForm('ruleForm')">确 定</el-button>
     </div>
-    <!-- 地图坐标 -->
-    <map-module
-      :parentDialog="mapDialog"
-      :parentCoord="formData.coord"
-      @parentUpdata="mapUpdata"
-      @parentCancel="mapCancel">
-    </map-module>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-// 引入地图组件
-import mapModule from '@/components/company/organ-map'
 export default{
   props: ['parentOrgId', 'parentOrgType', 'parentBaseId'],
   data () {
@@ -64,8 +51,7 @@ export default{
         state: 0
       },
       crewOptions: [],
-      disabled: false,
-      mapDialog: false
+      disabled: false
     }
   },
   created () {
@@ -76,9 +62,6 @@ export default{
     this.getDetails()
     // 获取人员
     this.getCrewOptions()
-  },
-  components: {
-    mapModule
   },
   computed: {
     ...mapState('user', [
@@ -229,14 +212,6 @@ export default{
           type: 'error'
         })
       })
-    },
-    /* 地图坐标 */
-    mapUpdata (data) {
-      this.formData.coord = data
-      this.mapDialog = false
-    },
-    mapCancel () {
-      this.mapDialog = false
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="report-site"
+    class="report-staff"
     v-loading="loading"
     element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
@@ -14,12 +14,21 @@
       </el-header>
       <el-container class="module-content">
         <el-aside width="280px" class="module-aside">
+          <div style="padding: 5px;">
+            <el-input
+              placeholder="输入关键字进行过滤"
+              clearable
+              v-model="filterText">
+            </el-input>
+          </div>
           <!-- 组织树 -->
           <el-tree
             :data="orgTree"
             ref="tree"
             show-checkbox
             node-key="id"
+            check-on-click-node
+            :filter-node-method="filterNode"
             :props="defaultProps">
           </el-tree>
         </el-aside>
@@ -106,13 +115,14 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 // 引入组织树组件
 // import orgModule from '@/components/report/report-org'
 export default{
   name: 'reportStaff',
   data () {
     return {
+      filterText: '',
       search: {
         date: [],
         name: '',
@@ -132,7 +142,6 @@ export default{
         children: 'children',
         label: 'name'
       },
-      itemProject: false,
       tableData: [],
       groupContent: '',
       total: 0,
@@ -148,14 +157,8 @@ export default{
   mounted () {
     // 时段
     const nowDate = this.$common.getNowDate('yyyy-mm-dd')
-    if (this.date.length === 0) {
-      this.search.date = [nowDate, nowDate]
-      this.nowSearch.date = [nowDate, nowDate]
-      this.setReportDate([nowDate, nowDate])
-    } else {
-      this.search.date = this.date
-      this.nowSearch.date = this.date
-    }
+    this.search.date = [nowDate, nowDate]
+    this.nowSearch.date = [nowDate, nowDate]
   },
   components: {
     // orgModule
@@ -167,16 +170,39 @@ export default{
     ]),
     ...mapState('other', [
       'orgTree'
-    ]),
-    ...mapState('report', [
-      'organizeId',
-      'date'
     ])
   },
   methods: {
-    ...mapActions('report', [
-      'setReportDate'
-    ]),
+    // 触发页面显示配置的筛选
+    filterNode (value, data, node) {
+      // 如果什么都没填就直接返回
+      if (!value) return true
+      // 如果传入的value和data中的label相同说明是匹配到了
+      if (data.name.indexOf(value) !== -1) return true
+      // 否则要去判断它是不是选中节点的子节点
+      return this.checkBelongNode(value, data, node)
+    },
+    // 判断传入的节点是不是选中节点的子节点
+    checkBelongNode (value, data, node) {
+      const level = node.level
+      // 如果传入的节点本身就是一级节点就不用校验了
+      if (level === 1) return false
+      // 先取当前节点的父节点
+      let parentData = node.parent
+      // 遍历当前节点的父节点
+      let index = 0
+      while (index < level - 1) {
+        // 如果匹配到直接返回
+        if (parentData.data.name.indexOf(value) !== -1) {
+          return true
+        }
+        // 否则的话再往上一层做匹配
+        parentData = parentData.parent
+        index++
+      }
+      // 没匹配到返回false
+      return false
+    },
     // 搜索
     searchList () {
       this.search = JSON.parse(JSON.stringify(this.nowSearch))
@@ -184,9 +210,6 @@ export default{
       this.nowPage = 1
       // 查询范围条件判断
       this.orgDispose()
-      // // 设置报表时间
-      // const date = this.search.date
-      // this.setReportDate(date)
     },
     // 查询范围条件处理
     orgDispose () {
@@ -204,8 +227,7 @@ export default{
       const projectsNode = nodesData.filter(item => {
         return item.organize_type === 3
       })
-     if (projectsNode.length > 0) {
-        this.itemProject = false
+      if (projectsNode.length > 0) {
         let ids = []
         projectsNode.forEach(item => {
           ids.push(item.base_id)
@@ -218,7 +240,6 @@ export default{
           message: '请重新选择查询范围，不能查询部门报表！',
           type: 'warning'
         })
-        return
       }
     },
     // 获取多项目列表数据
@@ -420,7 +441,7 @@ export default{
         return item.organize_type === 3
       })
       // 获取列表数据
-     if (projectsNode.length > 0) {
+      if (projectsNode.length > 0) {
         let ids = []
         projectsNode.forEach(item => {
           ids.push(item.base_id)
@@ -433,7 +454,6 @@ export default{
           message: '请重新选择导出范围，不能导出部门报表！',
           type: 'warning'
         })
-        return
       }
     },
     downProjectsFile (ids) {
@@ -455,13 +475,15 @@ export default{
     }
   },
   watch: {
-
+    filterText (val, oldVal) {
+      this.$refs.tree.filter(val)
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .report-site{
+  .report-staff{
     height: 100%;
     .module-container{
       height: 100%;

@@ -17,10 +17,6 @@
       <el-form-item label="分公司地址" prop="area" v-show="filiale">
         <el-input v-model.trim="formData.area" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="坐标" prop="coord">
-        <el-input :disabled="true" v-model="formData.coord" style="width: 360px; margin-right: 20px;"></el-input>
-        <el-button type="primary" @click="mapDialog = true">选择坐标</el-button>
-      </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" maxlength="100" placeholder="文本长度不得超过100个字符" v-model.trim="formData.remark"></el-input>
       </el-form-item>
@@ -35,20 +31,11 @@
       <el-button @click="cancelClick">取 消</el-button>
       <el-button type="primary" :disabled="disabled" @click="submitForm('ruleForm')">确 定</el-button>
     </div>
-    <!-- 地图坐标 -->
-    <map-module
-      :parentDialog="mapDialog"
-      :parentCoord="formData.coord"
-      @parentUpdata="mapUpdata"
-      @parentCancel="mapCancel">
-    </map-module>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-// 引入地图组件
-import mapModule from '@/components/company/organ-map'
 export default{
   props: ['parentOrgId', 'parentOrgName', 'parentAddType'],
   data () {
@@ -75,8 +62,7 @@ export default{
         state: 0
       },
       filiale: false,
-      disabled: false,
-      mapDialog: false
+      disabled: false
     }
   },
   created () {
@@ -101,9 +87,6 @@ export default{
       this.mesHint = '部门新增成功！'
       this.filiale = false
     }
-  },
-  components: {
-    mapModule
   },
   computed: {
     ...mapState('user', [
@@ -171,14 +154,6 @@ export default{
     // 取消
     cancelClick () {
       this.$emit('parentCancel')
-    },
-    /* 地图坐标 */
-    mapUpdata (data) {
-      this.formData.coord = data
-      this.mapDialog = false
-    },
-    mapCancel () {
-      this.mapDialog = false
     }
   }
 }

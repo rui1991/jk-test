@@ -2,7 +2,7 @@
   <div class="code">
     <div class="item">
       <div class="item-content">
-        <span class="iconfont icon-shoujihao"></span>
+        <span class="iconfont iconshoujihao"></span>
         <div class="item-input">
           <input type="text" class="input" v-model.trim="phone" placeholder="请输手机号码">
         </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="item">
       <div class="item-content">
-        <span class="iconfont icon-yanzhengma"></span>
+        <span class="iconfont iconyanzhengma"></span>
         <div class="item-input" style="margin-right: 120px;">
           <input type="text" class="input" v-model.trim="authCode" placeholder="">
         </div>

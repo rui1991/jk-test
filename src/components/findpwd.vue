@@ -20,7 +20,7 @@
             type="text"
             size="large"
             placeholder="手机"
-            prefix-icon="iconfont icon-shoujihao"
+            prefix-icon="iconfont iconshoujihao"
             v-model="phone">
           </el-input>
         </div>
@@ -28,7 +28,7 @@
           <el-input
             size="large"
             placeholder="验证码"
-            prefix-icon="iconfont icon-yanzhengma"
+            prefix-icon="iconfont iconyanzhengma"
             v-model="authCode"
             style="width: 60%">
           </el-input>
@@ -44,7 +44,7 @@
             size="large"
             type="password"
             placeholder="新密码"
-            prefix-icon="iconfont icon-mima"
+            prefix-icon="iconfont iconmima"
             v-model="pwdForm.newpwd1">
           </el-input>
         </div>
@@ -53,7 +53,7 @@
             size="large"
             type="password"
             placeholder="确认密码"
-            prefix-icon="iconfont icon-mima"
+            prefix-icon="iconfont iconmima"
             v-model="pwdForm.newpwd2">
           </el-input>
         </div>

@@ -18,10 +18,6 @@
       <el-form-item label="分公司地址" prop="area" v-show="filiale">
         <el-input v-model.trim="formData.area" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="坐标" prop="coord">
-        <el-input :disabled="true" v-model="formData.coord" style="width: 360px; margin-right: 20px;"></el-input>
-        <el-button type="primary" @click="mapDialog = true">选择坐标</el-button>
-      </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" maxlength="100" placeholder="文本长度不得超过100个字符" v-model.trim="formData.remark"></el-input>
       </el-form-item>
@@ -53,13 +49,6 @@
         <el-button type="primary">{{ imgBtnTxt }}</el-button>
       </el-upload>
     </div>
-    <!-- 地图坐标 -->
-    <map-module
-      :parentDialog="mapDialog"
-      :parentCoord="formData.coord"
-      @parentUpdata="mapUpdata"
-      @parentCancel="mapCancel">
-    </map-module>
     <!-- 上级机构 -->
     <parent-module
       :parentDialog="parDialog"
@@ -73,8 +62,6 @@
 
 <script>
 import { mapState } from 'vuex'
-// 引入地图组件
-import mapModule from '@/components/company/organ-map'
 // 引入上级机构选择组件
 import parentModule from '@/components/company/organ-parent'
 export default{
@@ -108,7 +95,6 @@ export default{
       parentDisabled: true,
       filiale: false,
       disabled: false,
-      mapDialog: false,
       imgUrl: '',
       reqHead: {
         token: '',
@@ -164,7 +150,6 @@ export default{
     }
   },
   components: {
-    mapModule,
     parentModule
   },
   computed: {
@@ -325,14 +310,6 @@ export default{
     },
     parCancel () {
       this.parDialog = false
-    },
-    /* 地图坐标 */
-    mapUpdata (data) {
-      this.formData.coord = data
-      this.mapDialog = false
-    },
-    mapCancel () {
-      this.mapDialog = false
     },
     /* 项目图片 */
     // 获取图片

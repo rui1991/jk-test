@@ -1,0 +1,60 @@
+/* 用于header main类型文件 */
+.module-container{
+  height: 100%;
+  padding-top: 60px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.module-header{
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.module-container .module-header .el-breadcrumb{
+  padding-top: 15px;
+  padding-left: 20px;
+  padding-bottom: 15px;
+  background: #ffffff;
+}
+.module-container .module-main{
+  height: 100%;
+  padding: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  overflow: auto;
+  background: #ffffff;
+}
+/* 单列 */
+.main-search-single {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+/* 多列 */
+.main-search-multi {
+
+}
+.main-search-multi .search-row{
+  display: flex;
+  height: 50px;
+  align-items: center;
+}
+.main-search .item{
+  width: 280px;
+  display: flex;
+  align-items: center;
+}
+.main-search .item.date{
+  width: 420px;
+}
+.main-search .item span{
+  width: 70px;
+  font-size: 14px;
+}
+.main-search .operate{
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}

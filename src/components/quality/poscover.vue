@@ -14,13 +14,21 @@
       </el-header>
       <el-container class="module-content">
         <el-aside width="280px" class="module-aside">
+          <div style="padding-bottom: 5px;">
+            <el-input
+              placeholder="输入关键字进行过滤"
+              clearable
+              v-model="filterText">
+            </el-input>
+          </div>
           <!-- 组织树 -->
           <el-tree
             :data="orgTree"
             ref="tree"
             show-checkbox
             node-key="id"
-            :props="defaultProps">
+            :props="defaultProps"
+            :filter-node-method="filterNode">
           </el-tree>
         </el-aside>
         <el-main class="module-main">
@@ -115,14 +123,13 @@
 
 <script>
 import { mapState } from 'vuex'
-// 引入组织树组件
-// import orgModule from '@/components/public/org-radio'
 // 引入详情组件
 import detModule from '@/components/quality/poscover-det'
 export default{
   name: 'poscover',
   data () {
     return {
+      filterText: '',
       search: {
         date: []
       },
@@ -158,7 +165,6 @@ export default{
     this.nowSearch.date = [nowDate, nowDate]
   },
   components: {
-    // orgModule,
     detModule
   },
   computed: {
@@ -170,6 +176,36 @@ export default{
     ])
   },
   methods: {
+    // 触发页面显示配置的筛选
+    filterNode (value, data, node) {
+      // 如果什么都没填就直接返回
+      if (!value) return true
+      // 如果传入的value和data中的label相同说明是匹配到了
+      if (data.name.indexOf(value) !== -1) return true
+      // 否则要去判断它是不是选中节点的子节点
+      return this.checkBelongNode(value, data, node)
+    },
+    // 判断传入的节点是不是选中节点的子节点
+    checkBelongNode (value, data, node) {
+      const level = node.level
+      // 如果传入的节点本身就是一级节点就不用校验了
+      if (level === 1) return false
+      // 先取当前节点的父节点
+      let parentData = node.parent
+      // 遍历当前节点的父节点
+      let index = 0
+      while (index < level - 1) {
+        // 如果匹配到直接返回
+        if (parentData.data.name.indexOf(value) !== -1) {
+          return true
+        }
+        // 否则的话再往上一层做匹配
+        parentData = parentData.parent
+        index++
+      }
+      // 没匹配到返回false
+      return false
+    },
     // 搜索
     searchList () {
       let date = this.search.date || []
@@ -238,7 +274,6 @@ export default{
           message: '请重新选择查询范围，不能查询部门报表！',
           type: 'warning'
         })
-        return
       }
     },
     // 获取分公司列表数据
@@ -453,7 +488,6 @@ export default{
           message: '请重新选择导出范围，不能导出部门报表！',
           type: 'warning'
         })
-        return
       }
     },
     downAllFile (id) {
@@ -500,6 +534,11 @@ export default{
         this.downDisabled = false
       }, 5000)
       window.location.href = '/ezx_jk/v2.0/selProPoPatrolCoverRateEO?' + params
+    }
+  },
+  watch: {
+    filterText (val, oldVal) {
+      this.$refs.tree.filter(val)
     }
   }
 }

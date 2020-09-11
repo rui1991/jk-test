@@ -18,12 +18,12 @@
             </el-select>
           </div>
           <div class="nav-item" v-if="authority.user">
-            <router-link class="log" to="/main/log"><i class="iconfont icon-log" style="font-size: 32px;"></i></router-link>
+            <router-link class="log" to="/main/log"><i class="iconfont iconlog" style="font-size: 32px;"></i></router-link>
           </div>
           <div class="nav-item">
             <router-link to="/main/message">
               <el-badge :value="unreadMesCount" :max="99" class="mes-hint">
-                <i class="iconfont icon-xiaoxi"></i>
+                <i class="iconfont iconxiaoxi"></i>
               </el-badge>
             </router-link>
           </div>
@@ -56,11 +56,11 @@
             background-color="#2f4055"
             active-text-color="#fff">
             <el-menu-item index="/main/home" style="font-size: 0;">
-              <i class="iconfont icon-yemian-copy-copy-copy-copy"></i>
+              <i class="iconfont iconyemian-copy-copy-copy-copy"></i>
               <span slot="title" style="font-size: 18px;">首页</span>
             </el-menu-item>
             <el-submenu index="1" class="submenu-item" v-if="authority.user">
-              <template slot="title"><i class="iconfont icon-qiye"></i>企业配置</template>
+              <template slot="title"><i class="iconfont iconqiye"></i>企业配置</template>
               <el-menu-item-group v-if="authority.organ">
                 <el-menu-item index="/main/organ">组织管理</el-menu-item>
               </el-menu-item-group>
@@ -69,7 +69,7 @@
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="2" class="submenu-item" v-if="authority.user">
-              <template slot="title"><i class="iconfont icon-shezhi"></i>基础配置</template>
+              <template slot="title"><i class="iconfont iconshezhi"></i>基础配置</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/position">位置管理</el-menu-item>
               </el-menu-item-group>
@@ -78,7 +78,7 @@
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="3" class="submenu-item" v-if="authority.user">
-              <template slot="title"><i class="iconfont icon-pinzhibaozhang"></i>品质过程管理</template>
+              <template slot="title"><i class="iconfont iconpinzhibaozhang"></i>品质过程管理</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/crewclock">人员打卡率报表</el-menu-item>
               </el-menu-item-group>
@@ -96,7 +96,7 @@
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="4" class="submenu-item">
-              <template slot="title"><i class="iconfont icon-xunjianguanli"></i>巡检巡查</template>
+              <template slot="title"><i class="iconfont iconxunjianguanli"></i>巡检巡查</template>
               <el-menu-item-group v-if="authority.user">
                 <el-menu-item index="/main/group">组管理</el-menu-item>
               </el-menu-item-group>
@@ -111,7 +111,7 @@
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="5" class="submenu-item" v-if="authority.user">
-              <template slot="title"><i class="iconfont icon-dianmin"></i>点名管理</template>
+              <template slot="title"><i class="iconfont icondianmin"></i>点名管理</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/callname-set">点名设置</el-menu-item>
               </el-menu-item-group>
@@ -120,13 +120,13 @@
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="6" class="submenu-item" v-if="authority.user">
-              <template slot="title"><i class="iconfont icon-shebeiguanli1"></i>设备管理</template>
+              <template slot="title"><i class="iconfont iconshebeiguanli1"></i>设备管理</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/hardfac">硬件设备管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="7" class="submenu-item" v-if="authority.user">
-              <template slot="title"><i class="iconfont icon-baobiaoguanli"></i>报表管理</template>
+              <template slot="title"><i class="iconfont iconbaobiaoguanli"></i>报表管理</template>
               <el-menu-item-group>
                 <el-menu-item index="/main/report-task">巡检任务执行报表</el-menu-item>
               </el-menu-item-group>
@@ -135,6 +135,15 @@
               </el-menu-item-group>
               <el-menu-item-group>
                 <el-menu-item index="/main/report-staff">个人巡检执行报表</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="8" class="submenu-item" v-if="deviceUid.indexOf(userId) !== -1">
+              <template slot="title"><i class="iconfont iconjiankong1"></i>数据监控</template>
+              <el-menu-item-group>
+                <el-menu-item index="/main/abnfacmon">异常设备监控</el-menu-item>
+              </el-menu-item-group>
+              <el-menu-item-group>
+                <el-menu-item index="/main/dataswgmon">数据网关心跳监控</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -176,7 +185,8 @@ export default{
       iconUrl: '',
       introDialog: false,
       pwdDialog: false,
-      nowProjectId: 0
+      nowProjectId: 0,
+      deviceUid: [1, 145]
     }
   },
   created () {
