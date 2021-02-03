@@ -11,10 +11,9 @@ module.exports = {
     proxyTable: {
       '/ezx_jk': {
         target: 'https://black-card.tq-service.com',
-        // target: 'http://www.allsps.com:8900',
         changeOrigin: true,
         pathRewrite: {
-          '^/ezx_jk': ''
+          '^/ezx_jk': '/ezx_jk'
         }
       }
     },

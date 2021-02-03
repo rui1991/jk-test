@@ -197,7 +197,9 @@ export default{
       },
       itemProject: false,
       tableData1: [],
+      sumTableData1: {},
       tableData2: [],
+      sumTableData2: {},
       total: 0,
       nowPage: 1,
       limit: 10,
@@ -348,6 +350,7 @@ export default{
         if (res.data.result === 'Sucess') {
           this.total = res.data.data1.total
           this.tableData1 = res.data.data1.message
+          this.sumTableData1 = res.data.data1.countMessage || {}
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)
           this.$message({
@@ -387,6 +390,7 @@ export default{
         if (res.data.result === 'Sucess') {
           this.total = res.data.data1.total
           this.tableData1 = res.data.data1.message
+          this.sumTableData1 = res.data.data1.countMessage || {}
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)
           this.$message({
@@ -430,6 +434,7 @@ export default{
         if (res.data.result === 'Sucess') {
           this.total = res.data.data1.total
           this.tableData2 = res.data.data1.reports
+          this.sumTableData2 = res.data.data1.countMessage || {}
         } else {
           const errHint = this.$common.errorCodeHint(res.data.error_code)
           this.$message({
@@ -449,7 +454,8 @@ export default{
     },
     // 合计表格规则设置
     getSummaries1 (param) {
-      const { columns, data } = param
+      const sumTableData = this.sumTableData1
+      const columns = param.columns
       const sums = []
       columns.forEach((column, index) => {
         if (index === 0) {
@@ -460,116 +466,49 @@ export default{
           sums[index] = '-'
           return
         }
+        if (index === 2) {
+          sums[index] = sumTableData.all_po_size
+          return
+        }
+        if (index === 3) {
+          sums[index] = sumTableData.all_set_user
+          return
+        }
         if (index === 4) {
-          const values = data.map(item => Number(item.position_size))
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-          } else {
-            sums[index] = ''
-          }
+          sums[index] = sumTableData.position_size
           return
         }
         if (index === 5) {
-          const values = data.map(item => Number(item.notRecordSize))
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-          } else {
-            sums[index] = ''
-          }
+          sums[index] = sumTableData.notRecordSize
           return
         }
         if (index === 6) {
-          const values = data.map(item => Number(item.recordRate))
-          if (!values.every(value => isNaN(value))) {
-            let sum = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-            const size = data.length
-            let average = sum / size
-            average = Math.round(average * 100)
-            sums[index] = average + '%'
-          } else {
-            sums[index] = ''
-          }
+          // 打卡率
+          const rate = this.$common.retainPercent(sumTableData.recordRate)
+          sums[index] = rate
+          return
+        }
+        if (index === 7) {
+          sums[index] = sumTableData.in_out_size
           return
         }
         if (index === 8) {
-          const values = data.map(item => Number(item.avwaittime))
-          if (!values.every(value => isNaN(value))) {
-            let sum = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-            const size = data.length
-            let average = sum / size
-            average = Math.round(average * 100) / 100
-            sums[index] = average + '分'
-          } else {
-            sums[index] = ''
-          }
+          // 平均停留时长
+          const stayTime = this.$common.formatNum(sumTableData.avwaittime, 2)
+          sums[index] = stayTime + '分'
           return
         }
         if (index === 9) {
-          const values = data.map(item => Number(item.avrecord))
-          if (!values.every(value => isNaN(value))) {
-            let sum = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-            const size = data.length
-            let average = sum / size
-            average = Math.round(average * 100) / 100
-            sums[index] = average + '分'
-          } else {
-            sums[index] = ''
-          }
-          return
-        }
-        const vals = data.map(item => Number(item[column.property]))
-        if (!vals.every(value => isNaN(value))) {
-          sums[index] = vals.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return prev + curr
-            } else {
-              return prev
-            }
-          })
-        } else {
-          sums[index] = ''
+          // 点位间隔时长
+          const intervalTime = this.$common.formatNum(sumTableData.avrecord, 2)
+          sums[index] = intervalTime + '分'
         }
       })
       return sums
     },
     getSummaries2 (param) {
-      const { columns, data } = param
+      const sumTableData = this.sumTableData2
+      const columns = param.columns
       const sums = []
       columns.forEach((column, index) => {
         if (index === 0) {
@@ -580,110 +519,38 @@ export default{
           sums[index] = '-'
           return
         }
+        if (index === 4) {
+          sums[index] = sumTableData.po_size
+          return
+        }
         if (index === 5) {
-          const values = data.map(item => Number(item.position_size))
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-          } else {
-            sums[index] = ''
-          }
+          sums[index] = sumTableData.position_size
           return
         }
         if (index === 6) {
-          const values = data.map(item => Number(item.notRecordSize))
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-          } else {
-            sums[index] = ''
-          }
+          sums[index] = sumTableData.notRecordSize
           return
         }
         if (index === 7) {
-          const values = data.map(item => Number(item.recordRate))
-          if (!values.every(value => isNaN(value))) {
-            let sum = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-            const size = data.length
-            let average = sum / size
-            average = Math.round(average * 100)
-            sums[index] = average + '%'
-          } else {
-            sums[index] = ''
-          }
+          // 打卡率
+          const rate = this.$common.retainPercent(sumTableData.recordRate)
+          sums[index] = rate
+          return
+        }
+        if (index === 8) {
+          sums[index] = sumTableData.in_out_size
           return
         }
         if (index === 9) {
-          const values = data.map(item => Number(item.avwaittime))
-          if (!values.every(value => isNaN(value))) {
-            let sum = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-            const size = data.length
-            let average = sum / size
-            average = Math.round(average * 100) / 100
-            sums[index] = average + '分'
-          } else {
-            sums[index] = ''
-          }
+          // 平均停留时间
+          const stayTime = this.$common.formatNum(sumTableData.avwaittime, 2)
+          sums[index] = stayTime + '分'
           return
         }
         if (index === 10) {
-          const values = data.map(item => Number(item.avrecord))
-          if (!values.every(value => isNaN(value))) {
-            let sum = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            })
-            const size = data.length
-            let average = sum / size
-            average = Math.round(average * 100) / 100
-            sums[index] = average + '分'
-          } else {
-            sums[index] = ''
-          }
-          return
-        }
-        const vals = data.map(item => Number(item[column.property]))
-        if (!vals.every(value => isNaN(value))) {
-          sums[index] = vals.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return prev + curr
-            } else {
-              return prev
-            }
-          })
-        } else {
-          sums[index] = ''
+          // 点位间隔时长
+          const intervalTime = this.$common.formatNum(sumTableData.avrecord, 2)
+          sums[index] = intervalTime + '分'
         }
       })
       return sums

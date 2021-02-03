@@ -29,6 +29,13 @@ const symbolParse = content => {
   return content.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, '\'')
 }
 
+// 保留百分比
+const retainPercent = (num, n = 0) => {
+  let value = Number(num) || 0
+  let square = Math.pow(10, n + 2)
+  return Math.round(value * square) / Math.pow(10, n) + '%'
+}
+
 // 保留小数
 const formatNum = (num, n = '') => {
   let value = Number(num)
@@ -414,6 +421,7 @@ export default {
   ruleMac: ruleMac,
   symbolEscape: symbolEscape,
   symbolParse: symbolParse,
+  retainPercent: retainPercent,
   formatNum: formatNum,
   formatDate: formatDate,
   getNowDate: getNowDate,
